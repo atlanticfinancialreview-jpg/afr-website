@@ -87,7 +87,7 @@ const stories = [
   },
   {
     slug: "diaspora-property-investment-nigeria",
-    image: "https://images.unsplash.com/photo-160059」と?auto=format&fit=crop&w=1400&q=85",
+    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1400&q=85",
     imageAlt: "Modern residential property in a landscaped development",
     category: "PROPERTY & INVESTMENT",
     title: "Buying property in Nigeria from abroad: checks to make before you pay",

@@ -144,6 +144,314 @@ const stories = [
       ["How AFR labels its figures", "AFR's public currency monitor presents indicative mid-market conversions from a public data service. It is not a CBN quotation, an interbank execution price, a bank-counter offer or a guaranteed remittance payout. The page should be read as a general reference, with the provider timestamp checked alongside AFR's retrieval time. Always confirm an actual transaction rate with the institution or regulated provider."],
       ["The key takeaway", "The most useful exchange-rate report is one that tells you what the number represents, who published it and when the underlying data was updated. Clear labels and consistent comparisons are more valuable than presenting a single figure without context."]
     ]
+  },
+  {
+    "slug": "nigerian-diaspora-bonds-guide",
+    "image": "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1400&q=85",
+    "imageAlt": "diaspora investment editorial photograph",
+    "category": "DIASPORA INVESTMENT",
+    "title": "Nigeria’s diaspora bonds: how Nigerians abroad can evaluate the opportunity",
+    "summary": "What a diaspora bond is, how to assess its terms, currency exposure, issuer risk and official offer documents.",
+    "date": "6 November 2026",
+    "read": "8 min read",
+    "body": [
+      [
+        "The issue in context",
+        "A diaspora bond is a debt instrument intended to attract savings from citizens living abroad and other eligible investors. The investor lends money to the issuer for a defined period and receives interest under the offer terms; it is not a bank deposit, donation or ownership share in a company."
+      ],
+      [
+        "What to check first",
+        "Start with the legal issuer and official offer document. Read the prospectus for the borrower, governing law, regulator, use of proceeds, maturity, interest dates, currency, minimum subscription, fees, tax treatment and application process. Confirm that the offer is current and the named transaction parties are genuine."
+      ],
+      [
+        "Understand the risks",
+        "Currency changes can alter the result. A dollar-denominated bond may suit some investors who spend in dollars, but repayment still depends on the issuer's ability to obtain foreign currency. A naira return may lose value when converted. Compare yield only after considering inflation, maturity, credit and currency risk."
+      ],
+      [
+        "Practical steps",
+        "Check liquidity before investing. A bond may be listed yet still have limited buyers or trade below its original purchase price. Verify payment channels through the Debt Management Office, the issuer and relevant regulators; never pay into a personal account. This is education, not a recommendation to buy."
+      ]
+    ]
+  },
+  {
+    "slug": "nigerian-treasury-bills-and-bonds-diaspora",
+    "image": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1400&q=85",
+    "imageAlt": "fixed income editorial photograph",
+    "category": "FIXED INCOME",
+    "title": "Nigerian Treasury bills and government bonds: a guide for diaspora investors",
+    "summary": "How bills and bonds differ, what yields mean, how auctions work and what to verify before committing funds from abroad.",
+    "date": "6 November 2026",
+    "read": "8 min read",
+    "body": [
+      [
+        "The issue in context",
+        "Treasury bills are short-term government securities commonly issued at a discount and redeemed at face value on maturity. Government bonds generally have longer maturities and may pay interest periodically. Both are debt instruments: the investor lends to the government rather than buying a company share."
+      ],
+      [
+        "What to check first",
+        "A discount rate, purchase price, coupon and yield are not interchangeable. A bill's return depends on the price paid and time to maturity. A bond's coupon is calculated on face value, while market yield also reflects price. Ask for the effective yield after fees and compare like with like."
+      ],
+      [
+        "Understand the risks",
+        "Ask a Nigerian bank or regulated dealer about non-resident onboarding, identification, BVN requirements where applicable, funding, minimum investment, custody, settlement currency and how proceeds are paid. For new issues, read the official auction notice; for existing bonds, ask for price, accrued interest, yield to maturity and liquidity."
+      ],
+      [
+        "Practical steps",
+        "Inflation can erode nominal returns, and a naira investment may lose value when translated into dollars, pounds or euros. Market prices can fall before maturity. Match maturity to when you need the money, use regulated channels and avoid schemes promising unusually high guaranteed returns."
+      ]
+    ]
+  },
+  {
+    "slug": "nigerian-stocks-diaspora-investors-guide",
+    "image": "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1400&q=85",
+    "imageAlt": "nigerian equities editorial photograph",
+    "category": "NIGERIAN EQUITIES",
+    "title": "How Nigerians abroad can invest in the Nigerian stock market",
+    "summary": "A beginner’s guide to regulated access, brokerage accounts, company research, costs, custody and share-market risks.",
+    "date": "6 November 2026",
+    "read": "8 min read",
+    "body": [
+      [
+        "The issue in context",
+        "A listed share represents an ownership interest in a company. Its price can rise or fall, dividends are not guaranteed, and investors can lose some or all of the money committed. Shares are not fixed deposits and should not be judged by a recent price increase alone."
+      ],
+      [
+        "What to check first",
+        "Identify a properly registered stockbroker and the custody and settlement arrangements used for the account. Ask whether the broker accepts non-resident clients, which identity and address documents are needed, how funds are transferred and whether statements and trade confirmations are available electronically."
+      ],
+      [
+        "Understand the risks",
+        "Read audited financial statements, interim results and material announcements. Consider revenue quality, debt, cash flow, governance, competitive position and exposure to currency or regulation. Check trading volume, bid-ask spread, brokerage commission, exchange charges, custody fees and taxes; thinly traded shares may be difficult to sell quickly."
+      ],
+      [
+        "Practical steps",
+        "Diversification matters. A portfolio concentrated in one company, sector or currency can be vulnerable to a single shock. Consider how Nigerian shares fit alongside investments and obligations in your country of residence. Keep trade confirmations and dividend records, and obtain qualified tax advice."
+      ]
+    ]
+  },
+  {
+    "slug": "diaspora-property-rental-income-risks",
+    "image": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1400&q=85",
+    "imageAlt": "real estate editorial photograph",
+    "category": "REAL ESTATE",
+    "title": "Owning rental property in Nigeria from abroad: income, costs and risks",
+    "summary": "A realistic guide to rental yield, vacancies, maintenance, property managers, tax and protecting a property investment from overseas.",
+    "date": "6 November 2026",
+    "read": "8 min read",
+    "body": [
+      [
+        "The issue in context",
+        "Rent collected is not the same as profit. Account for vacancies, repairs, insurance where available, security, service charges, management fees, taxes and periodic refurbishment. Gross rental yield is only a starting point because it excludes acquisition costs and ongoing expenses."
+      ],
+      [
+        "What to check first",
+        "Compare similar homes in the same neighbourhood and ask for evidence of completed lets, not only advertised rents. Consider tenant demand, access to transport and services, lease length, competing supply and nearby infrastructure. Forecast income conservatively rather than accepting an agent's best-case estimate."
+      ],
+      [
+        "Understand the risks",
+        "Choose a property manager with written responsibilities and limits. Agree fees, rent collection, inspections, maintenance approval thresholds, reporting frequency and dispute escalation. Require invoices and bank statements that reconcile rent due with money received."
+      ],
+      [
+        "Practical steps",
+        "Keep title documents, survey plans, approvals, tenancy agreements, inventories and payment histories securely. Have a local lawyer review the documents. Set aside a reserve for urgent repairs and empty periods; measure results in the currency in which you spend. Property is illiquid and returns are not guaranteed."
+      ]
+    ]
+  },
+  {
+    "slug": "diaspora-business-startup-nigeria",
+    "image": "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1400&q=85",
+    "imageAlt": "business & entrepreneurship editorial photograph",
+    "category": "BUSINESS & ENTREPRENEURSHIP",
+    "title": "Starting or buying a business in Nigeria from abroad: the checks that matter",
+    "summary": "How diaspora entrepreneurs can test demand, verify partners, structure funding, register properly and monitor a business from overseas.",
+    "date": "6 November 2026",
+    "read": "8 min read",
+    "body": [
+      [
+        "The issue in context",
+        "A business idea is not yet a business case. Identify the customer, the problem being solved, what buyers currently pay for alternatives and why they would switch. Speak with potential customers and test demand with a small pilot before committing significant capital."
+      ],
+      [
+        "What to check first",
+        "If buying an existing business, review registration, ownership, tax records, bank statements, debts, contracts, licences, staff obligations, litigation and suppliers. Reconcile reported sales with bank deposits and inventory. Interview customers and suppliers independently, and appoint your own lawyer and accountant."
+      ],
+      [
+        "Understand the risks",
+        "Choose a model that can be supervised remotely, with documented procedures, digital sales records, inventory controls and measurable management targets. Check registration and sector permits with the Corporate Affairs Commission and relevant regulators; registration alone does not authorise every regulated activity."
+      ],
+      [
+        "Practical steps",
+        "Separate startup capital from working capital and emergency reserves. Put in writing whether funds are equity, a loan or payment for goods. Require monthly accounts, bank reconciliations, tax and payroll records and inventory reports. Distance magnifies weak governance; obtain professional advice."
+      ]
+    ]
+  },
+  {
+    "slug": "nigerian-fintech-digital-banking-diaspora",
+    "image": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=85",
+    "imageAlt": "fintech & digital banking editorial photograph",
+    "category": "FINTECH & DIGITAL BANKING",
+    "title": "Nigerian fintech and digital banking: what diaspora customers should check",
+    "summary": "A practical guide to transfers, wallets, payment apps, security, licensing, customer support and the limits of digital finance services.",
+    "date": "6 November 2026",
+    "read": "8 min read",
+    "body": [
+      [
+        "The issue in context",
+        "A financial app may make transfers, bill payments or account access easier, but convenience alone does not establish whether it is suitable. Identify the legal provider, exact product, supported countries and whether it is a bank, payment service, remittance provider or technology interface working with another institution."
+      ],
+      [
+        "What to check first",
+        "Verify the provider and any regulated partner using official regulator information. Read the terms to understand who holds customer funds, whether balances are deposits or stored value, what protection applies if the provider fails and how complaints are handled. Do not assume every app offering a financial feature has a banking licence."
+      ],
+      [
+        "Understand the risks",
+        "Compare total transfer costs: exchange-rate margin, visible fee, payment method, delivery time, payout method and refund procedure. A zero-fee promotion may still use a less favourable conversion rate. Confirm that the app permits use from your country of residence and ask how to update identity documents and contact details."
+      ],
+      [
+        "Practical steps",
+        "Download only from official app stores. Use a unique password, device lock, multi-factor authentication and transaction alerts. Never share PINs or one-time codes with someone claiming to be support. Keep an alternative payment route, save receipts and use the provider's official complaint process."
+      ]
+    ]
+  },
+  {
+    "slug": "nigerian-retirement-planning-diaspora",
+    "image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=85",
+    "imageAlt": "retirement & long-term planning editorial photograph",
+    "category": "RETIREMENT & LONG-TERM PLANNING",
+    "title": "Retirement planning for Nigerians in the diaspora: build a plan across countries",
+    "summary": "How to coordinate pensions, savings, property, healthcare and currency exposure when retirement may involve more than one country.",
+    "date": "6 November 2026",
+    "read": "8 min read",
+    "body": [
+      [
+        "The issue in context",
+        "Your plan changes depending on whether you expect to remain abroad, return to Nigeria or split time between countries. Consider healthcare access, housing, residency status, tax rules, travel costs, family responsibilities and the reliability of income in each location. Model more than one scenario."
+      ],
+      [
+        "What to check first",
+        "List every source of retirement income: workplace pensions, public pensions, personal retirement accounts, investments, rental income and business interests. Note the currency, access age, payment rules, inflation adjustments, survivor benefits and restrictions on overseas payment. Obtain current statements rather than relying on memory."
+      ],
+      [
+        "Understand the risks",
+        "Pension portability, transfer options, tax relief and withdrawal rules depend on the countries and schemes involved. Moving a pension can create fees, tax consequences or loss of valuable guarantees. Do not transfer a pension because a salesperson promises a higher return; ask the scheme administrator and a qualified cross-border adviser for written explanations."
+      ],
+      [
+        "Practical steps",
+        "If income is paid in one currency while expenses are in another, exchange-rate changes can affect purchasing power. Model healthcare, insurance, travel and family support. Review pension statements, spending assumptions, tax residence, beneficiaries and emergency contacts annually. Seek advice in the relevant countries."
+      ]
+    ]
+  },
+  {
+    "slug": "nigeria-cross-border-tax-diaspora-guide",
+    "image": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1400&q=85",
+    "imageAlt": "tax & compliance editorial photograph",
+    "category": "TAX & COMPLIANCE",
+    "title": "Nigeria and cross-border tax: what Nigerians abroad should review",
+    "summary": "A plain-language guide to tax residence, Nigerian-source income, records, property, business interests and professional advice for diaspora households.",
+    "date": "6 November 2026",
+    "read": "8 min read",
+    "body": [
+      [
+        "The issue in context",
+        "Citizenship alone does not settle tax residence. Each jurisdiction has its own residence tests, and the facts of a person's circumstances matter. A person may have reporting obligations in more than one country, so check current statutory tests, the relevant tax year and any applicable treaty."
+      ],
+      [
+        "What to check first",
+        "Identify income connected with Nigeria, such as rental income, business profits, director fees, interest, dividends or proceeds from asset sales. The source and legal character of income can affect its treatment. Keep contracts, invoices, bank statements, property records and withholding-tax certificates."
+      ],
+      [
+        "Understand the risks",
+        "Separate Nigerian rules from the rules in your country of residence. That country may require disclosure of foreign bank accounts, rental property, company interests or investment income even if tax has been paid in Nigeria. Relief from double taxation may be available, but eligibility and documentation matter."
+      ],
+      [
+        "Practical steps",
+        "Keep records of income, expenses, tax withheld, dates, currencies and exchange-rate methods. Do not assume a remittance is automatically taxable income or that calling a payment a gift removes every tax consequence. Obtain qualified advice; this is general information, not tax advice."
+      ]
+    ]
+  },
+  {
+    "slug": "nigeria-oil-gas-energy-investment-outlook",
+    "image": "https://images.unsplash.com/photo-1513828583688-c52646e4e6a3?auto=format&fit=crop&w=1400&q=85",
+    "imageAlt": "energy & commodities editorial photograph",
+    "category": "ENERGY & COMMODITIES",
+    "title": "Nigeria’s oil, gas and energy outlook: what diaspora investors should understand",
+    "summary": "A framework for reading oil production, gas development, power supply, regulation and the risks behind Nigeria’s energy opportunities.",
+    "date": "6 November 2026",
+    "read": "8 min read",
+    "body": [
+      [
+        "The issue in context",
+        "International crude prices influence revenue expectations, but realised earnings also depend on production volumes, quality differentials, operating costs, security, infrastructure, contracts and fiscal arrangements. A higher global price does not automatically translate into a proportionate increase in government revenue or local company profits."
+      ],
+      [
+        "What to check first",
+        "Distinguish nameplate capacity, actual production, domestic supply and export volumes. Maintenance, pipeline availability, operational disruption and investment can affect output. Use official production and regulatory publications for the relevant period, and check whether figures are provisional or revised."
+      ],
+      [
+        "Understand the risks",
+        "Gas can support electricity generation, industrial users, processing and exports, but projects require pipelines, processing capacity, contracts, financing and dependable customers. The power sector also faces transmission, distribution, commercial and payment challenges. An announced project is not the same as a completed asset generating cash flow."
+      ],
+      [
+        "Practical steps",
+        "Energy investments may involve licences, joint ventures, host-community obligations, environmental approvals, local-content rules and long timelines. Commodity prices are volatile and projects can face cost overruns, delays, foreign-exchange shortages and policy changes. Verify licences and disclosures independently; this is not an investment recommendation."
+      ]
+    ]
+  },
+  {
+    "slug": "diversified-nigeria-investment-portfolio-diaspora",
+    "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1400&q=85",
+    "imageAlt": "portfolio strategy editorial photograph",
+    "category": "PORTFOLIO STRATEGY",
+    "title": "Building a diversified Nigeria-focused investment portfolio from abroad",
+    "summary": "How to think about cash, fixed income, shares, property and currency risk without concentrating wealth in one market or asset.",
+    "date": "6 November 2026",
+    "read": "8 min read",
+    "body": [
+      [
+        "The issue in context",
+        "Separate funds needed for near-term commitments from capital intended for long-term growth. Money for school fees, medical expenses, a home purchase or family support should not carry the same risk as savings that can remain invested for years. Define the time horizon, currency of future spending and loss you could tolerate."
+      ],
+      [
+        "What to check first",
+        "Diversification means more than owning several products. A portfolio can still be concentrated if holdings depend on the same sector, borrower, currency or economic condition. Consider exposure across asset classes, issuers, sectors and currencies, including assets in the country where you live."
+      ],
+      [
+        "Understand the risks",
+        "Cash can provide liquidity, although inflation erodes purchasing power. Treasury bills and bonds may provide scheduled returns but carry issuer, interest-rate, inflation, liquidity and currency risks. Shares can participate in company growth but prices fall and dividends are not guaranteed. Property can produce rent but is illiquid and brings title, maintenance and management risks."
+      ],
+      [
+        "Practical steps",
+        "Account fees, brokerage commissions, transfer charges, custody, property management, taxes and conversion spreads reduce net returns. Confirm who legally holds each asset and how statements are issued. Review allocations periodically and seek qualified financial and tax advice; there is no single portfolio suitable for every diaspora investor."
+      ]
+    ]
+  },
+  {
+    "slug": "nigeria-agriculture-investment-diaspora",
+    "image": "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1400&q=85",
+    "imageAlt": "agribusiness & food editorial photograph",
+    "category": "AGRIBUSINESS & FOOD",
+    "title": "Agribusiness in Nigeria: opportunities and checks for diaspora investors",
+    "summary": "A practical introduction to food production, processing, storage, distribution and the operational risks behind agricultural ventures.",
+    "date": "6 November 2026",
+    "read": "8 min read",
+    "body": [
+      [
+        "The issue in context",
+        "Agriculture offers several different business models: crop production, livestock, processing, storage, logistics, inputs and distribution. Each has different capital needs, seasons, skills, buyers and risks. Do not invest simply because food demand is essential; a viable business still needs reliable production, customers and cost control."
+      ],
+      [
+        "What to check first",
+        "Start with a defined product and market. Identify the buyer, quality standard, volume, price, delivery schedule and competing suppliers. Verify access to land, water, power, storage, transport and skilled operators. For processing, confirm raw-material supply and equipment maintenance before projecting capacity."
+      ],
+      [
+        "Understand the risks",
+        "Agricultural projects face weather, pests, disease, price volatility, spoilage, theft, logistics and policy risks. Build realistic budgets for inputs, labour, insurance where available, storage and transport. Test the operation on a manageable scale before expanding and obtain local technical advice."
+      ],
+      [
+        "Practical steps",
+        "Use written agreements with landowners, operators, suppliers and buyers. Verify land rights and permits independently, separate business funds from personal spending and require production, inventory and sales reports. Diaspora investors should appoint trusted independent oversight; projected yields and returns are not guarantees."
+      ]
+    ]
   }
 
 ];

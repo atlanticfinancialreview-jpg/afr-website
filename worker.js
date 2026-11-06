@@ -212,8 +212,12 @@ function aboutPage() {
 
 async function getRates() {
   const upstream = await fetch("https://open.er-api.com/v6/latest/USD", {
-    headers: { "Accept": "application/json" },
-    cf: { cacheTtl: 900, cacheEverything: true }
+    headers: {
+      "Accept": "application/json",
+      "Cache-Control": "no-cache",
+      "Pragma": "no-cache"
+    },
+    cf: { cacheTtl: 0, cacheEverything: false }
   });
   if (!upstream.ok) throw new Error("Currency service error");
   const data = await upstream.json();
@@ -278,7 +282,7 @@ export default {
         // First-visit fallback: populate KV if the scheduled job has not run yet.
         if (!data) data = await refreshAndStoreRates(env);
         return Response.json(data, {
-          headers: { "Cache-Control": "public, max-age=900", "Access-Control-Allow-Origin": "*" }
+          headers: { "Cache-Control": "no-store, no-cache, must-revalidate", "Pragma": "no-cache", "Access-Control-Allow-Origin": "*" }
         });
       } catch (error) {
         return Response.json({ error: "Currency data is temporarily unavailable." }, {

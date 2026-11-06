@@ -67,8 +67,8 @@ const stories = [
   ,
   {
     slug: "nigerian-bank-accounts-for-diaspora",
-    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=85",
-    imageAlt: "Professional using a bank card and smartphone for digital banking",
+    image: "https://raw.githubusercontent.com/atlanticfinancialreview-jpg/afr-website/main/assets/afr-diaspora-banking-hero.jpg",
+    imageAlt: "Nigerian diaspora client in a navy suit meeting a bank manager in a premium Nigerian bank office",
     category: "DIASPORA BANKING",
     title: "Nigerian bank accounts for the diaspora: what to know before opening one",
     summary: "A practical guide to account types, identity checks, foreign-currency accounts, fees and managing your Nigerian banking from abroad.",

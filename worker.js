@@ -180,10 +180,10 @@ function ratesPage() {
 function marketsPage() {
   const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">GLOBAL MARKETS</div><h1>Markets beyond borders</h1><p>Financial-market coverage and economic context across the regions that matter to globally connected Nigerian readers.</p></div></section>
   <main class="wrap"><div class="market-grid">
-  <div class="market"><b>Nigeria</b><span>NGX, banking, monetary policy, energy and the wider economy.</span></div>
-  <div class="market"><b>United States</b><span>US equities, Federal Reserve policy, Treasury markets and the dollar.</span></div>
-  <div class="market"><b>Europe</b><span>European markets, ECB policy, banking and cross-border regulation.</span></div>
-  <div class="market"><b>Asia</b><span>Asian equities, trade, currencies and regional economic developments.</span></div>
+  <a class="market" href="https://ngxgroup.com/" target="_blank" rel="noopener"><b>Nigeria ↗</b><span>NGX, banking, monetary policy, energy and the wider economy. Visit Nigerian Exchange Group.</span></a>
+  <a class="market" href="https://www.federalreserve.gov/" target="_blank" rel="noopener"><b>United States ↗</b><span>US equities, Federal Reserve policy, Treasury markets and the dollar. Visit the Federal Reserve.</span></a>
+  <a class="market" href="https://www.ecb.europa.eu/" target="_blank" rel="noopener"><b>Europe ↗</b><span>European markets, ECB policy, banking and cross-border regulation. Visit the European Central Bank.</span></a>
+  <a class="market" href="https://www.adb.org/" target="_blank" rel="noopener"><b>Asia ↗</b><span>Asian economies, regional development, trade and financial context. Visit the Asian Development Bank.</span></a>
   </div><div class="article" style="margin-top:22px"><h2>Our market coverage</h2><p>AFR explains market movements and economic developments in context. This page is a guide to our coverage areas; it does not display live stock prices or investment recommendations.</p><h2>Primary information sources</h2><p>Readers can consult official market and policy sources, including the <a class="text-link" href="https://ngxgroup.com/" target="_blank" rel="noopener">Nigerian Exchange Group</a>, <a class="text-link" href="https://www.sec.gov/" target="_blank" rel="noopener">US Securities and Exchange Commission</a>, <a class="text-link" href="https://www.federalreserve.gov/" target="_blank" rel="noopener">Federal Reserve</a>, <a class="text-link" href="https://www.ecb.europa.eu/" target="_blank" rel="noopener">European Central Bank</a> and <a class="text-link" href="https://www.nasdaq.com/" target="_blank" rel="noopener">Nasdaq</a>.</p></div></main>`;
   return shell(content, "Markets", "Global Markets | Atlantic Financial Review", "Financial-market coverage across Nigeria, the United States, Europe and Asia.", "/markets");
 }

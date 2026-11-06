@@ -122,7 +122,7 @@ async function loadRates(){
   const names=[["USD","US dollar"],["GBP","British pound"],["EUR","Euro"],["CAD","Canadian dollar"]];
   box.innerHTML=names.map(([code,label])=>{const value=data.rates[code];const shown=value?"₦"+Number(value).toLocaleString("en-NG",{maximumFractionDigits:2}):"Unavailable";return '<div class="rate-box"><small>'+label+' ('+code+')</small><strong>'+shown+'</strong><small>per 1 '+code+'</small></div>'}).join("");
   const updated=document.getElementById("rate-updated");
-  if(updated)updated.textContent="Indicative mid-market reference · Updated "+new Date(data.updated).toLocaleString();
+  if(updated){const fetched=data.fetchedAt||data.updated;updated.textContent="Indicative mid-market reference · AFR checked "+new Date(fetched).toLocaleString()+(data.updated&&data.fetchedAt?" · Provider data timestamp "+new Date(data.updated).toLocaleString():"");}
  }catch(e){box.innerHTML='<div class="rate-box"><small>Currency data</small><strong>Temporarily unavailable</strong></div>';const updated=document.getElementById("rate-updated");if(updated)updated.textContent="Please check again shortly. No rate has been estimated."}
 }
 loadRates();

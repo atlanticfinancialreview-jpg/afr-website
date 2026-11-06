@@ -64,6 +64,88 @@ const stories = [
       ["The key takeaway", "Cross-border finances become easier to manage when records are accurate, organised and secure. Keep evidence of significant transfers and income, separate different types of activity, and get professional advice on the rules that apply to your own circumstances. This article is general information, not personal legal or tax advice."]
     ]
   }
+  ,
+  {
+    slug: "nigerian-bank-accounts-for-diaspora",
+    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=85",
+    imageAlt: "Professional using a bank card and smartphone for digital banking",
+    category: "DIASPORA BANKING",
+    title: "Nigerian bank accounts for the diaspora: what to know before opening one",
+    summary: "A practical guide to account types, identity checks, foreign-currency accounts, fees and managing your Nigerian banking from abroad.",
+    date: "6 November 2026",
+    read: "7 min read",
+    body: [
+      ["Start with the reason you need the account", "Before applying, decide what the account must do. You may want to receive naira payments, support relatives, pay local bills, manage rental income or hold funds for a future visit. A regular naira account and a foreign-currency domiciliary account serve different purposes. The right choice depends on the currency you receive, how you expect to use the money and the bank's current eligibility rules."],
+      ["Understand the account types", "A naira account is designed for transactions in local currency. A domiciliary account is intended to hold an approved foreign currency, subject to the bank's terms and applicable regulation. Do not assume that every account accepts every currency or that a foreign-currency balance can be withdrawn or transferred without limits, charges or documentation. Ask the bank to explain deposits, withdrawals, transfers, minimum balances and transaction fees in writing."],
+      ["Ask about non-resident onboarding", "Banks may offer different procedures for customers living outside Nigeria. Identity verification, proof of address, passport details, a Nigerian identification number or other documents may be requested depending on the product and current requirements. Confirm the exact list directly with the bank through its official website or verified customer-service channel. Requirements can change, and an old checklist shared online may no longer apply."],
+      ["Check how you will operate the account", "For a customer abroad, reliable remote access matters. Ask whether the bank supports online and mobile banking, international access, secure transaction approvals, card delivery overseas and customer support across time zones. Find out how to replace a lost phone or restore access if your Nigerian SIM stops working. Keep your registered email and phone number current, and never disclose a password or one-time security code to anyone."],
+      ["Compare the full cost", "Look beyond account-opening promotions. Ask about maintenance fees, card charges, transfer fees, foreign-currency handling, cash withdrawal charges and the cost of moving money between your overseas bank and Nigeria. Also ask which exchange rate applies if a transaction converts currencies. A convenient account can become expensive if you make frequent small transfers or rely on services with unfavourable conversion terms."],
+      ["Keep the account secure and well documented", "Use a unique password, enable multi-factor authentication and turn on transaction alerts. Review statements regularly and report unfamiliar activity promptly using the bank's official contact details. Keep records explaining significant incoming payments, especially where they relate to business, rent or family support. Do not allow another person to operate the account using your login credentials."],
+      ["Questions to ask before you apply", "Can I open and maintain this account while resident overseas? Which documents are required now? Which currencies can it hold? What are the fees and limits? Can I complete transfers and security checks from my country of residence? How do I get help if I lose access? Clear answers to these questions are more useful than choosing an account based on an advertisement alone."],
+      ["The key takeaway", "A Nigerian bank account can make legitimate financial connections with home easier, but the details matter. Match the account to your purpose, verify current non-resident requirements directly with the bank and understand fees, limits and security arrangements before moving money."]
+    ]
+  },
+  {
+    slug: "diaspora-property-investment-nigeria",
+    image: "https://images.unsplash.com/photo-160059」と?auto=format&fit=crop&w=1400&q=85",
+    imageAlt: "Modern residential property in a landscaped development",
+    category: "PROPERTY & INVESTMENT",
+    title: "Buying property in Nigeria from abroad: checks to make before you pay",
+    summary: "A due-diligence guide for Nigerians overseas considering land, a home or an investment property in Nigeria.",
+    date: "6 November 2026",
+    read: "8 min read",
+    body: [
+      ["Treat distance as a risk to manage", "Buying property while living abroad can be convenient, but distance makes independent verification essential. Photographs, promotional videos and assurances from an agent do not establish ownership, planning approval, physical boundaries or the condition of a building. Build a process in which qualified professionals verify the property and documents independently before you make a substantial payment."],
+      ["Verify the seller's authority", "Establish who owns the property and whether the person negotiating has legal authority to sell it. Request copies of title documents and have an independent property lawyer investigate them with the relevant land registry and public authorities. Depending on the location and transaction, relevant records may include a registered title, certificate of occupancy, deed, survey plan, consent or other approvals. The documents required and their legal effect vary by state and property history."],
+      ["Confirm the land and its boundaries", "Use a qualified surveyor to check the survey plan, coordinates, boundaries and any overlap or dispute concerns. Visit the site independently or appoint a trusted professional who is not financially tied to the seller. Check access roads, drainage, utilities, permitted use and any government acquisition or planning restrictions that may affect the land. A location pin or estate brochure is not a substitute for a proper survey and title search."],
+      ["Inspect the building and development", "For a completed property, arrange an independent physical inspection of the structure, roof, plumbing, electrical installation, drainage and visible defects. For an off-plan purchase, examine the developer's track record, approvals, construction timetable, specifications, payment milestones and remedies for delay or non-completion. Ask what happens if the finished property differs from the plans or the project does not proceed."],
+      ["Understand the full cost", "The advertised price may not include legal fees, survey costs, registration, consent, taxes, service charges, agency commission, maintenance or later construction expenses. Request a written schedule of all charges and clarify which party is responsible for each. For an investment property, prepare a realistic budget for vacancy periods, repairs, insurance, security and property management rather than assuming rent will cover every cost."],
+      ["Use controlled payments and written agreements", "Avoid paying large sums into a personal account simply because an agent requests it. Have your lawyer confirm the correct recipient, payment milestones, refund terms and conditions that must be met before completion. Ensure the agreement identifies the property precisely and records the parties, price, payment schedule, completion obligations and consequences of breach. Keep receipts and bank evidence for every payment."],
+      ["Plan for management after purchase", "If you will not live in the property, decide who will inspect it, collect rent, arrange repairs, pay approved bills and report problems. Use a written management agreement with clear authority, reporting intervals and fee arrangements. Keep ownership documents and important contacts in secure digital and physical records. Do not hand over unlimited control of the property or its income without defined safeguards."],
+      ["The key takeaway", "Property can be part of a long-term financial plan, but it is not a guaranteed return and it is not risk-free. Independent legal, survey and technical checks should come before payment. This guide is general information; obtain advice from professionals familiar with the state and transaction involved."]
+    ]
+  },
+  {
+    slug: "global-markets-diaspora-investors",
+    image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1400&q=85",
+    imageAlt: "Global financial market data displayed on trading screens",
+    category: "GLOBAL MARKETS",
+    title: "Global markets and the Nigerian diaspora: five signals worth watching",
+    summary: "A framework for understanding interest rates, currencies, inflation, energy and company earnings without reacting to every market headline.",
+    date: "6 November 2026",
+    read: "7 min read",
+    body: [
+      ["Look beyond the daily market move", "A sharp move in a share index or currency can dominate headlines, but a single session rarely explains the whole economic picture. Diaspora households may have income, savings, investments and family commitments in several currencies. A more useful approach is to follow a small set of indicators consistently and ask how each could affect borrowing costs, purchasing power, employment, business conditions and long-term investment risk."],
+      ["1. Central-bank interest-rate decisions", "Policy rates influence the cost of borrowing and the return available on some savings products, although the effect is not immediate or identical across countries. Watch the decision itself, the central bank's explanation and its assessment of inflation and economic activity. A rate cut does not automatically mean shares will rise, and a rate increase does not automatically make every investment unattractive. Markets often move in response to the difference between a decision and what investors had already expected."],
+      ["2. Inflation and household purchasing power", "Inflation measures how prices change over time. For a household supporting relatives in Nigeria while paying rent, transport or school costs abroad, inflation in both countries can matter. Look at the official statistical release, the period covered and the categories contributing to the change. Headline inflation can hide different experiences across food, housing, transport and services. Compare like-for-like measures rather than mixing monthly changes with annual rates."],
+      ["3. Currency movements and conversion needs", "Exchange-rate changes affect the value of overseas income when converted into naira and the cost of obligations denominated in foreign currency. The impact depends on when money is converted, the rate actually available and the purpose of the payment. Avoid treating a public mid-market chart as a guaranteed bank or remittance quote. For a planned transfer, compare executable provider quotes and the final amount received."],
+      ["4. Energy prices and the wider economy", "Oil and gas prices can influence government revenue, foreign-exchange inflows, transport costs and company earnings, but the relationship is not one-to-one. Production levels, fiscal arrangements, imports, infrastructure and global demand all matter. For Nigeria, readers should distinguish the international benchmark price from domestic production, realised revenue and the effect on public finances. One headline price cannot tell the full story."],
+      ["5. Company earnings and business conditions", "Company results can reveal whether revenue, costs, debt and cash flow are improving or deteriorating. Read the report rather than relying only on a share-price reaction. Compare the same reporting period, note one-off items and examine management's explanation of risks. A profitable company can still face valuation or liquidity risks, while a temporary fall in earnings does not by itself establish a long-term trend."],
+      ["Build a calm monitoring routine", "Choose a few official sources: central banks for policy statements, national statistics agencies for inflation and labour data, exchange operators and regulators for market disclosures, and company filings for results. Record the publication date and the period each figure describes. Review the information on a regular schedule instead of refreshing market prices throughout the day. If you invest, align decisions with your objectives, time horizon, diversification and ability to bear losses."],
+      ["The key takeaway", "Global markets are connected, but their effects on each household are personal. Following a small number of reliable indicators—and understanding what each one measures—can help diaspora readers interpret headlines without confusing market noise with a decision they must make immediately. This article is educational, not investment advice."]
+    ]
+  },
+  {
+    slug: "naira-exchange-rate-november-2026",
+    image: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=1400&q=85",
+    imageAlt: "Close-up of international currency notes",
+    category: "NIGERIA ECONOMY",
+    title: "The naira exchange rate: how to read the market in November 2026",
+    summary: "A clear guide to official-market references, retail quotes, currency data timestamps and the forces that can shape the naira.",
+    date: "6 November 2026",
+    read: "8 min read",
+    body: [
+      ["Start by identifying the rate being quoted", "There is no single exchange-rate number that describes every naira transaction. An official-market reference, a bank's customer quote, a remittance payout rate and an indicative currency-converter figure may represent different markets, methods and costs. Before comparing two numbers, identify the source, date, market segment, whether it is a buying or selling rate and whether fees are included."],
+      ["Official market data needs context", "The Central Bank of Nigeria publishes official foreign-exchange market information and policy material. Readers should use the original publication and its definitions when reporting an official figure. A reference or weighted average is not necessarily an offer available to every customer. If a report quotes a daily market figure, it should state the date and the exact measure rather than describing every number simply as 'the CBN rate'."],
+      ["Why retail quotes can be different", "Banks and regulated transfer providers price specific services. Their quotes may reflect their funding costs, liquidity, operating expenses, risk controls and commercial margins. A transfer provider may also charge a separate fee or offer different rates depending on how the sender pays. For a household sending money home, compare the final payout for the same amount and payment method, not only the headline exchange rate."],
+      ["Watch the data timestamp", "A rate page can be checked today while displaying source data last updated yesterday or earlier. These are two different timestamps. A responsible rate display should identify when AFR retrieved the data and, where supplied, when the data provider says its underlying rates were updated. A fresh retrieval does not make old source data current. Readers should treat delayed or indicative information accordingly."],
+      ["Understand the forces that may matter", "Currency markets can be influenced by foreign-exchange supply and demand, export receipts, import needs, portfolio flows, investor confidence, monetary policy, inflation expectations and global dollar conditions. These factors interact and their influence can change. A single announcement or commodity-price movement does not provide a reliable forecast of the next exchange-rate level."],
+      ["What diaspora households can do", "For regular remittances, compare providers at the time you are ready to send and consider whether timing, delivery certainty or the final amount matters most. For tuition, property or business commitments, plan for currency movements and avoid assuming that today's quote will remain available. Keep records of the rate and fees applied to each transaction. If a payment is large or legally significant, obtain advice from the bank or qualified professional handling it."],
+      ["How AFR labels its figures", "AFR's public currency monitor presents indicative mid-market conversions from a public data service. It is not a CBN quotation, an interbank execution price, a bank-counter offer or a guaranteed remittance payout. The page should be read as a general reference, with the provider timestamp checked alongside AFR's retrieval time. Always confirm an actual transaction rate with the institution or regulated provider."],
+      ["The key takeaway", "The most useful exchange-rate report is one that tells you what the number represents, who published it and when the underlying data was updated. Clear labels and consistent comparisons are more valuable than presenting a single figure without context."]
+    ]
+  }
+
 ];
 
 function esc(value) {

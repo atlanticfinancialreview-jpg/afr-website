@@ -8,6 +8,8 @@ const SITE = {
 const stories = [
   {
     slug: "send-money-to-nigeria",
+    image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=1400&q=85",
+    imageAlt: "Person reviewing an international money transfer on a laptop",
     category: "DIASPORA FINANCE",
     title: "Sending money to Nigeria: what diaspora families should compare",
     summary: "A practical guide to comparing exchange rates, transfer fees, delivery times and payout options before sending money home.",
@@ -25,6 +27,8 @@ const stories = [
   },
   {
     slug: "understanding-naira-exchange-rates",
+    image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1400&q=85",
+    imageAlt: "Financial market charts displayed on a trading screen",
     category: "CURRENCY & MARKETS",
     title: "Understanding the different naira exchange rates",
     summary: "Why official reference rates, bank quotes and money-transfer rates differ—and how to read each figure correctly.",
@@ -42,6 +46,8 @@ const stories = [
   },
   {
     slug: "diaspora-tax-and-financial-records",
+    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1400&q=85",
+    imageAlt: "Organised financial paperwork and calculator on a desk",
     category: "TAX & PLANNING",
     title: "Cross-border money: financial records diaspora households should keep",
     summary: "A practical record-keeping guide for Nigerians abroad who earn, save, invest or support family across borders.",
@@ -102,7 +108,7 @@ main{padding:35px 0 55px}.section-head{display:flex;justify-content:space-betwee
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.feature{background:#fff;border:1px solid var(--line);padding:22px;border-radius:7px}.feature .icon{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#f5eddd;color:#8a6728;font-weight:bold;margin-bottom:14px}.feature h3{font:700 18px Georgia,serif;color:var(--navy);margin:0 0 8px}.feature p{font-size:13px;color:var(--muted);margin:0}
 .rate-panel{background:#fff;border:1px solid var(--line);border-radius:7px;padding:22px}.rate-head{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.rate-head h2{font:700 24px Georgia,serif;color:var(--navy);margin:0}.rate-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}.rate-box{background:#f6f8fb;border:1px solid var(--line);padding:17px;border-radius:5px}.rate-box small{color:var(--muted);font-weight:bold}.rate-box strong{display:block;font:700 24px Georgia,serif;color:var(--navy);margin-top:7px}.rate-note{font-size:11px;color:var(--muted);margin:8px 0 0}
 .market-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.market{background:#fff;border:1px solid var(--line);border-radius:6px;padding:17px}.market b{display:block;color:var(--navy);font:700 17px Georgia,serif;margin-bottom:6px}.market span{font-size:12px;color:var(--muted)}
-.article{background:#fff;border:1px solid var(--line);border-radius:7px;padding:clamp(22px,4vw,42px);max-width:850px;margin:auto}.article h1{font:700 clamp(30px,5vw,46px)/1.12 Georgia,serif;color:var(--navy);margin:10px 0 14px}.article .intro{font-size:18px;color:var(--muted)}.article h2{font:700 23px Georgia,serif;color:var(--navy);margin:27px 0 7px}.article p{color:#34445a}.article-meta{font-size:12px;color:var(--muted);margin-bottom:22px}
+.article-hero{width:100%;height:auto;max-height:390px;object-fit:cover;border-radius:6px;margin:18px 0 22px;display:block}.article{background:#fff;border:1px solid var(--line);border-radius:7px;padding:clamp(22px,4vw,42px);max-width:850px;margin:auto}.article h1{font:700 clamp(30px,5vw,46px)/1.12 Georgia,serif;color:var(--navy);margin:10px 0 14px}.article .intro{font-size:18px;color:var(--muted)}.article h2{font:700 23px Georgia,serif;color:var(--navy);margin:27px 0 7px}.article p{color:#34445a}.article-meta{font-size:12px;color:var(--muted);margin-bottom:22px}
 .page-title{background:var(--navy);color:#fff;padding:35px 0}.page-title h1{font:700 clamp(30px,4vw,44px) Georgia,serif;margin:7px 0}.page-title p{color:#d4dfec;max-width:720px;margin:0}
 .notice{background:#fff8e9;border-left:4px solid var(--gold);padding:13px 16px;color:#5d4a28;font-size:12px;margin-top:15px}
 footer{background:#041126;color:#d5dfeb;padding:34px 0 20px;border-top:3px solid var(--gold)}.foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:30px}.foot-grid h3{color:#fff;font:700 17px Georgia,serif}.foot-grid p,.foot-grid a{font-size:12px;color:#b9c7d8}.foot-links{display:grid;gap:8px}.copyright{border-top:1px solid #24344b;margin-top:25px;padding-top:16px;color:#8fa1b8;font-size:11px}
@@ -194,7 +200,7 @@ function diasporaPage() {
 
 function articlePage(story) {
   const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">AFR KNOWLEDGE DESK</div><p>Independent explainers for informed financial decisions.</p></div></section>
-  <main class="wrap"><article class="article"><div class="tag">${story.category}</div><h1>${esc(story.title)}</h1><p class="intro">${esc(story.summary)}</p><div class="article-meta">${story.date} · ${story.read}</div>${story.body.map(([h,p])=>`<h2>${esc(h)}</h2><p>${esc(p)}</p>`).join("")}<div class="notice">This article is general information, not individual financial, legal or tax advice. Check current rules and consult a qualified professional where necessary.</div><p style="margin-top:25px"><a class="text-link" href="/diaspora">← BACK TO DIASPORA FINANCE</a></p></article></main>`;
+  <main class="wrap"><article class="article"><div class="tag">${story.category}</div><h1>${esc(story.title)}</h1><p class="intro">${esc(story.summary)}</p><div class="article-meta">${story.date} · ${story.read}</div><img class="article-hero" src="${esc(story.image)}" alt="${esc(story.imageAlt)}" loading="lazy" decoding="async">${story.body.map(([h,p])=>`<h2>${esc(h)}</h2><p>${esc(p)}</p>`).join("")}<div class="notice">This article is general information, not individual financial, legal or tax advice. Check current rules and consult a qualified professional where necessary.</div><p style="margin-top:25px"><a class="text-link" href="/diaspora">← BACK TO DIASPORA FINANCE</a></p></article></main>`;
   return shell(content, "Diaspora", story.title + " | Atlantic Financial Review", story.summary, "/article/" + story.slug);
 }
 

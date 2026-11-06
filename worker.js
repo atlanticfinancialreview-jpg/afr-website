@@ -452,6 +452,314 @@ const stories = [
         "Use written agreements with landowners, operators, suppliers and buyers. Verify land rights and permits independently, separate business funds from personal spending and require production, inventory and sales reports. Diaspora investors should appoint trusted independent oversight; projected yields and returns are not guarantees."
       ]
     ]
+  },
+  {
+    "slug": "diaspora-investment-options-nigeria",
+    "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1400&q=85",
+    "imageAlt": "Investment planning dashboard",
+    "category": "DIASPORA INVESTMENT",
+    "title": "Best investment options in Nigeria for diaspora investors in 2026",
+    "summary": "Compare regulated savings, government securities, shares, property and business opportunities with a clear view of risk.",
+    "date": "6 November 2026",
+    "read": "7 min read",
+    "body": [
+      [
+        "Start with the purpose",
+        "Decide what the money is for and when you may need it. Funds reserved for school fees, medical bills or family support should not carry the same risk as money that can remain invested for years. Keep an emergency reserve separate."
+      ],
+      [
+        "Compare the main routes",
+        "Government securities have defined terms but carry inflation, interest-rate, liquidity and currency risks. Shares can fall sharply. Property may generate rent but requires title checks, maintenance and management. A private business needs deeper due diligence."
+      ],
+      [
+        "Verify the provider and costs",
+        "Use regulated institutions and check their status with the relevant official regulator. Understand who legally holds the asset and what rights you receive. Include fees, taxes, custody, transfers and currency conversion when comparing net returns."
+      ],
+      [
+        "AFR takeaway",
+        "There is no single best investment for every Nigerian abroad. Match the product to your time horizon, spending currency, risk tolerance and ability to monitor it. This is general education, not a personal recommendation."
+      ]
+    ]
+  },
+  {
+    "slug": "diaspora-property-buying-safely",
+    "image": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1400&q=85",
+    "imageAlt": "Modern residential property",
+    "category": "REAL ESTATE",
+    "title": "How to buy property in Nigeria from abroad safely",
+    "summary": "A due-diligence guide to title, surveys, approvals, payments, legal representation and remote ownership risks.",
+    "date": "6 November 2026",
+    "read": "7 min read",
+    "body": [
+      [
+        "Do not begin with the brochure",
+        "A glossy brochure or social-media advert is not proof of ownership. Identify the exact property, seller, chain of title and interest being offered. Confirm that the property inspected is the one described in the documents."
+      ],
+      [
+        "Use your own lawyer and surveyor",
+        "Appoint a property lawyer who represents you alone. Ask for land-registry searches, review of the root of title, checks for encumbrances or litigation and an explanation of what interest can legally be transferred. Have a registered surveyor verify boundaries and coordinates."
+      ],
+      [
+        "Check approvals and control payments",
+        "Check planning permission, building approvals, access and outstanding charges. Use a written contract with milestones and refund provisions. Pay only the verified legal owner or a documented escrow arrangement, not an unrelated personal account."
+      ],
+      [
+        "AFR takeaway",
+        "Remote ownership makes independent checks essential. For off-plan property, check the developer's track record and inspect before handover. Obtain advice from a Nigerian property lawyer."
+      ]
+    ]
+  },
+  {
+    "slug": "nigerian-treasury-bills-bonds-diaspora",
+    "image": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1400&q=85",
+    "imageAlt": "Financial documents and calculator",
+    "category": "FIXED INCOME",
+    "title": "Nigerian Treasury bills and government bonds: a diaspora guide",
+    "summary": "Understand the difference between bills and bonds, how yields work and how to assess inflation and currency risk.",
+    "date": "6 November 2026",
+    "read": "7 min read",
+    "body": [
+      [
+        "Bills and bonds differ",
+        "Treasury bills are short-term government securities commonly issued below face value and redeemed at face value on maturity. Government bonds generally have longer terms and may pay interest periodically. Both are debt instruments, not company ownership."
+      ],
+      [
+        "Understand price and yield",
+        "A bond coupon is its stated interest rate on face value; yield also reflects price paid and time remaining. A bill's return depends on purchase price, redemption value and holding period. Ask for the actual price, yield calculation, maturity date and charges."
+      ],
+      [
+        "Check access and liquidity",
+        "Eligibility, identification, funding and custody depend on the security and intermediary. Ask a regulated Nigerian institution whether it accepts non-resident clients. Market prices can fall if you sell before maturity, and some securities have limited resale liquidity."
+      ],
+      [
+        "AFR takeaway",
+        "A positive naira return may lose purchasing power through inflation or exchange-rate changes. Match maturity to your cash needs and use official issue information. Government securities are not risk-free."
+      ]
+    ]
+  },
+  {
+    "slug": "nigerian-banking-fees-diaspora",
+    "image": "https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=1400&q=85",
+    "imageAlt": "Bank card and digital banking",
+    "category": "BANKING",
+    "title": "Nigerian banking fees in 2026: what diaspora customers should check",
+    "summary": "A checklist for account maintenance, transfers, cards, foreign-currency services and avoiding unnecessary charges.",
+    "date": "6 November 2026",
+    "read": "7 min read",
+    "body": [
+      [
+        "Look beyond the opening offer",
+        "An account advertised as free may still charge for transfers, cards, statements, withdrawals or special services. Ask for the current tariff for the exact account type. Do not rely on an old screenshot or another product's fee schedule."
+      ],
+      [
+        "Compare international transfers",
+        "A transfer may involve sending-bank, receiving-bank and intermediary-bank charges, as well as an exchange-rate margin. Ask which currency will arrive, whether deductions are possible and how long settlement takes."
+      ],
+      [
+        "Check cards and account access",
+        "Confirm whether a card works for international transactions, what limits apply and how conversion is calculated. Ask about replacement fees, dispute procedures and how to block a lost card while abroad."
+      ],
+      [
+        "AFR takeaway",
+        "Save statements and transaction references, compare charges against the published tariff and challenge errors through the bank's official channel. Choose an account whose total costs fit your actual use."
+      ]
+    ]
+  },
+  {
+    "slug": "receiving-foreign-currency-nigeria-diaspora",
+    "image": "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=1400&q=85",
+    "imageAlt": "Foreign currency and financial paperwork",
+    "category": "CURRENCY & PAYMENTS",
+    "title": "Receiving foreign currency in Nigeria: rules, accounts and practical options",
+    "summary": "What diaspora families and businesses should understand about domiciliary accounts, remittance payouts and documentation.",
+    "date": "6 November 2026",
+    "read": "7 min read",
+    "body": [
+      [
+        "Identify the payment purpose",
+        "Salary, family remittance, export receipts, investment proceeds and business payments may be treated differently. The source and purpose can determine what documents a bank or provider requests. Describe the transaction accurately."
+      ],
+      [
+        "Understand domiciliary accounts",
+        "A domiciliary account is a foreign-currency account maintained by a Nigerian bank under its terms and applicable rules. Ask which currencies are supported, how deposits and withdrawals work, what fees apply and whether it can receive transfers from your country."
+      ],
+      [
+        "Compare routes and keep records",
+        "Compare the amount received, exchange-rate method, delivery time, payout channel and refund process. Retain contracts, payslips, invoices and transfer receipts; use verified payment instructions and avoid unknown agents or personal wallets."
+      ],
+      [
+        "AFR takeaway",
+        "Choose the channel according to source, purpose, currency and amount. Confirm current requirements with the bank or licensed provider and retain a clear audit trail."
+      ]
+    ]
+  },
+  {
+    "slug": "diaspora-money-transfer-apps-comparison",
+    "image": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=85",
+    "imageAlt": "Smartphone used for digital finance",
+    "category": "FINTECH & REMITTANCES",
+    "title": "Money transfer apps for Nigerians abroad: how to compare them",
+    "summary": "Compare exchange rates, fees, delivery speed, payout methods and provider reliability before sending money home.",
+    "date": "6 November 2026",
+    "read": "7 min read",
+    "body": [
+      [
+        "Compare the amount that arrives",
+        "Enter the same sending amount, payment method and payout option on each quote screen. Compare the net amount expected by the recipient, not just the advertised fee. A zero-fee promotion may still include a less favourable exchange rate."
+      ],
+      [
+        "Check the full payment route",
+        "Card funding and bank transfers may carry different charges or processing times. Confirm whether the quote includes all fees and whether the recipient's bank or wallet may apply another charge."
+      ],
+      [
+        "Verify the provider and protect your transfer",
+        "Check the provider's legal identity and authorisation in the sending country and any regulated Nigerian partner. Use official app-store listings, keep transaction references and never share passwords, PINs or one-time codes."
+      ],
+      [
+        "AFR takeaway",
+        "The best app is the legitimate provider that delivers the best net amount and service for your payment. Compare live quotes because rates, fees and limits change."
+      ]
+    ]
+  },
+  {
+    "slug": "us-stock-market-diaspora-investors",
+    "image": "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1400&q=85",
+    "imageAlt": "Financial market charts",
+    "category": "GLOBAL MARKETS",
+    "title": "Investing in the U.S. stock market from Nigeria or abroad: a beginner’s guide",
+    "summary": "Understand brokerage access, exchange-traded funds, shares, fees, tax questions and currency exposure.",
+    "date": "6 November 2026",
+    "read": "7 min read",
+    "body": [
+      [
+        "Know what you are buying",
+        "A share represents ownership in a company; an exchange-traded fund can hold a basket of securities. Neither is a guaranteed savings product. Prices can fall, dividends can change and currency movements affect results."
+      ],
+      [
+        "Check broker eligibility",
+        "Brokerage services differ by country of residence. Verify that a broker accepts clients in your jurisdiction and check its regulatory status. Understand which legal entity holds the account and how client assets are treated if it fails."
+      ],
+      [
+        "Compare costs and tax questions",
+        "Review commissions, account fees, currency conversion, custody and withdrawal costs. U.S. investments can create withholding, reporting or estate-planning questions for non-U.S. persons; seek qualified cross-border tax advice."
+      ],
+      [
+        "AFR takeaway",
+        "Diversify rather than chase headlines. Consider your investment horizon and spending currency, and avoid borrowing to trade or acting on social-media predictions."
+      ]
+    ]
+  },
+  {
+    "slug": "nigeria-oil-price-outlook-diaspora",
+    "image": "https://images.unsplash.com/photo-1513828583688-c52646e4e6a3?auto=format&fit=crop&w=1400&q=85",
+    "imageAlt": "Oil production infrastructure",
+    "category": "ENERGY & COMMODITIES",
+    "title": "Oil prices and Nigeria’s economy: what diaspora investors should watch",
+    "summary": "How global crude prices, Nigerian production, public revenue, foreign exchange and energy policy connect.",
+    "date": "6 November 2026",
+    "read": "7 min read",
+    "body": [
+      [
+        "Price is only one part",
+        "International benchmarks influence export earnings, but realised revenue also depends on production volumes, quality, costs, contracts and the share available to the state."
+      ],
+      [
+        "Watch production and exports",
+        "Maintenance, pipeline availability, security, investment and operational efficiency affect output. Distinguish official production figures from capacity estimates and note the reference month."
+      ],
+      [
+        "Understand the wider economy",
+        "Oil receipts can influence government revenue and foreign-exchange supply, but collection, deductions, debt obligations and broader conditions matter. Do not infer the naira's next move from oil prices alone."
+      ],
+      [
+        "AFR takeaway",
+        "Gas, electricity and renewable projects also need infrastructure, financing, regulation and customers. Follow dated official data and company disclosures rather than relying on a single price forecast."
+      ]
+    ]
+  },
+  {
+    "slug": "nigeria-inflation-cost-of-living-diaspora",
+    "image": "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1400&q=85",
+    "imageAlt": "Groceries at a market",
+    "category": "ECONOMY & HOUSEHOLD FINANCE",
+    "title": "Nigeria’s cost of living: how diaspora families can plan for inflation",
+    "summary": "A practical approach to household budgets, family support, school fees, healthcare and changing prices.",
+    "date": "6 November 2026",
+    "read": "7 min read",
+    "body": [
+      [
+        "The national rate is not every family's experience",
+        "Official inflation measures a defined basket, but households spend different proportions on rent, food, transport, education and healthcare. Focus on your family's actual monthly spending."
+      ],
+      [
+        "Read official data carefully",
+        "When using National Bureau of Statistics releases, note the reference month, publication date, annual rate, monthly movement and category breakdown. Do not compare year-on-year and month-on-month rates as if they were the same."
+      ],
+      [
+        "Create a family-support budget",
+        "List recurring needs such as food, rent, utilities, school fees, transport and medicine. Separate essential commitments from occasional requests and agree who is responsible for each item."
+      ],
+      [
+        "AFR takeaway",
+        "Compare final transfer payouts, exchange-rate margins, fees and delivery times. Translate official statistics into a realistic household plan and review actual costs."
+      ]
+    ]
+  },
+  {
+    "slug": "nigeria-business-opportunities-diaspora",
+    "image": "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1400&q=85",
+    "imageAlt": "Entrepreneurs reviewing a business plan",
+    "category": "BUSINESS & ENTREPRENEURSHIP",
+    "title": "Business opportunities in Nigeria for diaspora investors: how to assess the basics",
+    "summary": "A framework for testing demand, choosing sectors, checking partners, understanding licences and managing a business from overseas.",
+    "date": "6 November 2026",
+    "read": "7 min read",
+    "body": [
+      [
+        "Start with demand",
+        "Identify the paying customer, problem being solved, price customers can afford and alternatives available. Test demand on a small scale before committing substantial capital."
+      ],
+      [
+        "Compare sectors realistically",
+        "Agriculture, logistics, education, healthcare, consumer goods and technology have different requirements. Estimate startup costs, working capital, suppliers, staffing, licences, margins and time to revenue."
+      ],
+      [
+        "Verify partners and businesses",
+        "Check legal identity, ownership, registration, debts, tax records, contracts, licences and litigation. Reconcile reported sales with bank statements, inventory and customer evidence. Use your own lawyer and accountant."
+      ],
+      [
+        "AFR takeaway",
+        "Require regular accounts, bank reconciliations, inventory records and clear payment approval limits. Validate demand and insist on transparent reporting before investing."
+      ]
+    ]
+  },
+  {
+    "slug": "nigeria-naira-outlook-2027",
+    "image": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=1400&q=85",
+    "imageAlt": "Currency and financial market imagery",
+    "category": "CURRENCY OUTLOOK",
+    "title": "The naira outlook: key factors diaspora households and investors should watch",
+    "summary": "A balanced guide to foreign-exchange supply, inflation, policy, oil receipts and market expectations.",
+    "date": "6 November 2026",
+    "read": "7 min read",
+    "body": [
+      [
+        "No forecast is a promise",
+        "Exchange rates respond to supply and demand, policy, trade flows, investor confidence and expectations. A forecast is a scenario based on assumptions, not a guarantee."
+      ],
+      [
+        "Foreign-exchange supply matters",
+        "Export receipts, oil and gas production, remittances and investment inflows can affect availability. Demand from importers, travellers, businesses and investors also matters and can shift quickly."
+      ],
+      [
+        "Inflation and policy influence expectations",
+        "Inflation affects purchasing power and can influence interest-rate decisions and demand for foreign currency. Policy credibility and implementation also shape expectations."
+      ],
+      [
+        "AFR takeaway",
+        "Official reference rates, market averages, bank customer quotes and informal-market indications are not interchangeable. Follow dated data and plan around your own cash needs rather than relying on one prediction."
+      ]
+    ]
   }
 
 ];

@@ -1,0 +1,9 @@
+{
+  "name": "afr-website",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Atlantic Financial Review Cloudflare Worker",
+  "devDependencies": {
+    "wrangler": "^4.135.0"
+  }
+}

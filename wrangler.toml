@@ -3,6 +3,8 @@ main = "worker.js"
 compatibility_date = "2026-11-04"
 
 [[kv_namespaces]]
+binding = "AFR_DATA"
+id = "c56df47c447942e38f8053f3590a0542"
 
 [assets]
 directory = "./public"

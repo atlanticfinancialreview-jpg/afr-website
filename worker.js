@@ -130,7 +130,7 @@ function ratesPage() {
     <section class="rate-panel" style="margin-bottom:22px">
       <div class="rate-head"><div><div class="eyebrow">FOREIGN EXCHANGE</div><h2>How much is US$1 worth?</h2></div><span class="market-tag">DAILY REFERENCE</span></div>
       <div id="global-fx-state" class="market-note">Loading the latest published reference rates…</div>
-      <div class="fx-table-wrap"><table class="fx-table"><thead><tr><th>Currency</th><th>Code</th><th>Value for US$1</th><th>Daily change</th></tr></thead><tbody id="global-fx-rows"><tr><td colspan="3">Retrieving data…</td></tr></tbody></table></div>
+      <div class="fx-table-wrap"><table class="fx-table"><thead><tr><th>Currency</th><th>Code</th><th>Value for US$1</th><th>Daily change</th></tr></thead><tbody id="global-fx-rows"><tr><td colspan="4">Retrieving data…</td></tr></tbody></table></div>
       <p class="rate-note" id="global-fx-source">Source: Frankfurter, based on central-bank reference data.</p>
       <p class="rate-note">These are daily reference rates, not live dealing prices or guaranteed bank/customer rates. Values may not update on weekends or public holidays.</p>
     </section>
@@ -167,7 +167,7 @@ function ratesPage() {
       state.textContent="Reference date: "+data.date+" · Base currency: USD"+(data.comparisonDate?" · Compared with "+data.comparisonDate:" · Daily comparison will appear when prior data is available");
       document.getElementById("global-fx-source").textContent="Source: "+data.source+". Figures are shown to four decimal places.";
     }catch(error){
-      rows.innerHTML="<tr><td colspan='3'>The reference feed is temporarily unavailable. No figures have been estimated.</td></tr>";
+      rows.innerHTML="<tr><td colspan='4'>The reference feed is temporarily unavailable. No figures have been estimated.</td></tr>";
       state.textContent="Data temporarily unavailable";
     }
   })();
@@ -259,6 +259,57 @@ async function getRates() {
   };
 }
 
+
+async function refreshGlobalFx(env) {
+  const upstream = await fetch("https://api.frankfurter.dev/v2/rates?base=USD&quotes=EUR,GBP,JPY,CHF,CNY,CAD,AUD,NZD,SGD", {
+    headers: { "Accept": "application/json" },
+    cf: { cacheTtl: 3600, cacheEverything: true }
+  });
+  if (!upstream.ok) throw new Error("Global FX source unavailable");
+  const rows = await upstream.json();
+  if (!Array.isArray(rows) || !rows.length) throw new Error("Global FX data unavailable");
+  const rates = {};
+  for (const row of rows) {
+    if (row && row.quote && Number.isFinite(Number(row.rate))) rates[row.quote] = Number(row.rate);
+  }
+  const date = rows[0].date;
+  let previous = null;
+  if (env.AFR_DATA) {
+    const latestText = await env.AFR_DATA.get("globalfx:latest");
+    const latest = latestText ? JSON.parse(latestText) : null;
+    if (latest && latest.date !== date) {
+      await env.AFR_DATA.put("globalfx:previous", JSON.stringify(latest));
+      previous = latest;
+    } else {
+      const previousText = await env.AFR_DATA.get("globalfx:previous");
+      previous = previousText ? JSON.parse(previousText) : null;
+    }
+  }
+  const changes = {};
+  for (const code of Object.keys(rates)) {
+    const before = previous && previous.rates ? Number(previous.rates[code]) : NaN;
+    const now = Number(rates[code]);
+    changes[code] = Number.isFinite(before) && before > 0
+      ? { previous: before, change: now - before, percent: ((now - before) / before) * 100 }
+      : null;
+  }
+  const payload = {
+    base: "USD",
+    date,
+    rates,
+    changes,
+    comparisonDate: previous ? previous.date : null,
+    source: "Frankfurter · central-bank reference data",
+    type: "daily-reference",
+    fetchedAt: new Date().toISOString()
+  };
+  if (env.AFR_DATA) {
+    await env.AFR_DATA.put("globalfx:latest", JSON.stringify(payload));
+    await env.AFR_DATA.put("globalfx:history:" + date, JSON.stringify(payload), { expirationTtl: 60 * 60 * 24 * 400 });
+  }
+  return payload;
+}
+
 async function refreshAndStoreRates(env) {
   const data = await getRates();
   if (env.AFR_DATA) {
@@ -274,7 +325,10 @@ async function refreshAndStoreRates(env) {
 export default {
   // Cloudflare Cron Trigger: 0 7 * * * (07:00 UTC = 08:00 Lagos time).
   async scheduled(controller, env, ctx) {
-    ctx.waitUntil(refreshAndStoreRates(env));
+    ctx.waitUntil(Promise.allSettled([
+      refreshAndStoreRates(env),
+      refreshGlobalFx(env)
+    ]));
   },
 
   async fetch(request, env, ctx) {
@@ -304,53 +358,8 @@ export default {
 
     if (path === "/api/global-fx") {
       try {
-        const upstream = await fetch("https://api.frankfurter.dev/v2/rates?base=USD&quotes=EUR,GBP,JPY,CHF,CNY,CAD,AUD,NZD,SGD", {
-          headers: { "Accept": "application/json" },
-          cf: { cacheTtl: 3600, cacheEverything: true }
-        });
-        if (!upstream.ok) throw new Error("Global FX source unavailable");
-        const rows = await upstream.json();
-        if (!Array.isArray(rows) || !rows.length) throw new Error("Global FX data unavailable");
-        const rates = {};
-        for (const row of rows) {
-          if (row && row.quote && Number.isFinite(Number(row.rate))) rates[row.quote] = Number(row.rate);
-        }
-        const date = rows[0].date;
-        let previous = null;
-        if (env.AFR_DATA) {
-          const latestText = await env.AFR_DATA.get("globalfx:latest");
-          const latest = latestText ? JSON.parse(latestText) : null;
-          if (latest && latest.date !== date) {
-            await env.AFR_DATA.put("globalfx:previous", JSON.stringify(latest));
-            previous = latest;
-          } else {
-            const previousText = await env.AFR_DATA.get("globalfx:previous");
-            previous = previousText ? JSON.parse(previousText) : null;
-          }
-        }
-        const changes = {};
-        for (const code of Object.keys(rates)) {
-          const before = previous && previous.rates ? Number(previous.rates[code]) : NaN;
-          const now = Number(rates[code]);
-          changes[code] = Number.isFinite(before) && before > 0
-            ? { previous: before, change: now - before, percent: ((now - before) / before) * 100 }
-            : null;
-        }
-        const payload = {
-          base: "USD",
-          date,
-          rates,
-          changes,
-          comparisonDate: previous ? previous.date : null,
-          source: "Frankfurter · central-bank reference data",
-          type: "daily-reference",
-          fetchedAt: new Date().toISOString()
-        };
-        if (env.AFR_DATA) {
-          await env.AFR_DATA.put("globalfx:latest", JSON.stringify(payload));
-          await env.AFR_DATA.put("globalfx:history:" + date, JSON.stringify(payload), { expirationTtl: 60 * 60 * 24 * 400 });
-        }
-        return Response.json(payload, {
+        const data = await refreshGlobalFx(env);
+        return Response.json(data, {
           headers: { "Cache-Control": "public, max-age=3600", "Access-Control-Allow-Origin": "*" }
         });
       } catch (error) {

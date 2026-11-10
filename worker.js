@@ -121,9 +121,9 @@ function homePage() {
 }
 
 function featuresPage() {
-  const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">AFR FEATURES</div><h1>Global finance and business, explained.</h1><p>Twenty editorial features exploring the economy, currencies, markets, banking, investment, technology, energy and leadership.</p></div></section>
+  const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">AFR FEATURES</div><h1>Global finance and business, explained.</h1></div></section>
   <main class="wrap"><div class="cards">${stories.map(s=>`<a class="feature" href="/article/${s.slug}"><div class="icon">↗</div><span class="tag">${esc(s.category)}</span><h3>${esc(s.title)}</h3><p>${esc(s.summary)}</p><span class="text-link">READ FEATURE →</span></a>`).join("")}</div></main>`;
-  return shell(content, "Features", "Global Finance Features | Atlantic Financial Review", "Explore 20 global finance and business features from AFR.", "/features");
+  return shell(content, "Features", "Global Finance Features | Atlantic Financial Review", "Explore global finance and business coverage from AFR.", "/features");
 }
 
 function ratesPage() {
@@ -150,7 +150,7 @@ function articlePage(story) {
 
 function aboutPage() {
   const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">ABOUT AFR</div><h1>Independent perspectives. Global relevance.</h1><p>Atlantic Financial Review covers the forces shaping economies, capital, companies and markets around the world.</p></div></section>
-  <main class="wrap"><div class="article"><h2>Our focus</h2><p>AFR covers the global economy, currencies, markets, banking, investment, technology, energy, trade and business leadership.</p><h2>Our approach</h2><p>We aim to make financial information clear, useful and grounded in identifiable sources. Where figures are indicative, estimates or subject to change, we aim to say so.</p><h2 id="disclaimer">Editorial disclaimer</h2><p>Content on this website is for general information and education. It is not personal financial, investment, legal or tax advice. Market data and exchange rates can change and may be delayed. Readers should verify important information with the relevant official institution or regulated provider before making decisions.</p><h2>Contact</h2><p>Editorial enquiries: <a class="text-link" href="mailto:editor@atlanticfinancialreview.com">editor@atlanticfinancialreview.com</a></p></div></main>`;
+  <main class="wrap"><div class="article"><h2>Our focus</h2><p>AFR covers the global economy, currencies, markets, banking, investment, technology, energy, trade and business leadership.</p><h2>Our approach</h2><p>We aim to make financial information clear, useful and grounded in identifiable sources. Where figures are indicative, estimates or subject to change, we aim to say so.</p><h2>About the Founder</h2><p>Atlantic Financial Review was founded by Augustine Ofomah, a University of Benin graduate in Business Administration (1986), with an interest in making global financial and business developments clearer and more accessible to readers.</p><h2 id="disclaimer">Editorial disclaimer</h2><p>Content on this website is for general information and education. It is not personal financial, investment, legal or tax advice. Market data and exchange rates can change and may be delayed. Readers should verify important information with the relevant official institution or regulated provider before making decisions.</p><h2>Contact</h2><p>Editorial enquiries: <a class="text-link" href="mailto:editor@atlanticfinancialreview.com">editor@atlanticfinancialreview.com</a></p></div></main>`;
   return shell(content, "About", "About Atlantic Financial Review", "About AFR's independent global financial coverage and editorial approach.", "/about");
 }
 

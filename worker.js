@@ -21,7 +21,7 @@ function esc(value) {
 
 function shell(content, active = "Home", title = SITE.name, description = SITE.description, canonicalPath = "/") {
   const nav = [
-    ["Home", "/"], ["Features", "/features"], ["Markets", "/markets"], ["About", "/about"]
+    ["Home", "/"], ["Features", "/features"], ["Markets", "/markets"], ["Currencies", "/rates"], ["About", "/about"]
   ];
   return `<!doctype html>
 <html lang="en">
@@ -125,11 +125,90 @@ function featuresPage() {
 }
 
 function ratesPage() {
+  const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">GLOBAL CURRENCY MONITOR</div><h1>Global exchange rates</h1><p>Daily reference rates for major world currencies, with the publication date shown clearly.</p></div></section>
+  <main class="wrap" style="padding-top:28px;padding-bottom:50px">
+    <section class="rate-panel" style="margin-bottom:22px">
+      <div class="rate-head"><div><div class="eyebrow">FOREIGN EXCHANGE</div><h2>How much is US$1 worth?</h2></div><span class="market-tag">DAILY REFERENCE</span></div>
+      <div id="global-fx-state" class="market-note">Loading the latest published reference rates…</div>
+      <div class="fx-table-wrap"><table class="fx-table"><thead><tr><th>Currency</th><th>Code</th><th>Value for US$1</th></tr></thead><tbody id="global-fx-rows"><tr><td colspan="3">Retrieving data…</td></tr></tbody></table></div>
+      <p class="rate-note" id="global-fx-source">Source: Frankfurter, based on central-bank reference data.</p>
+      <p class="rate-note">These are daily reference rates, not live dealing prices or guaranteed bank/customer rates. Values may not update on weekends or public holidays.</p>
+    </section>
+    <section class="article"><h2>How to read this monitor</h2><p>The table shows the number of units of each listed currency equivalent to one US dollar. The date is the source publication date, not necessarily today's date. A previous working day's figure may remain visible when markets or central banks are closed.</p><p>For a transaction, confirm the final rate and fees directly with your bank or regulated currency provider.</p><p>Data service: <a class="text-link" href="https://frankfurter.dev/" target="_blank" rel="noopener">Frankfurter</a>. This is an informational reference monitor, not investment or foreign-exchange advice.</p></section>
+  </main>
+  <style>
+  .market-tag{font-size:11px;font-weight:700;letter-spacing:1px;background:#edf2f7;color:#29425f;padding:7px 10px;border-radius:3px}
+  .market-note{font-size:13px;color:#637187;margin:12px 0}
+  .fx-table-wrap{overflow-x:auto}
+  .fx-table{width:100%;border-collapse:collapse;min-width:320px}
+  .fx-table th,.fx-table td{text-align:left;padding:13px 12px;border-bottom:1px solid #e5eaf0}
+  .fx-table th{font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:#637187}
+  .fx-table td:last-child{font-weight:700;font-variant-numeric:tabular-nums}
+  @media(max-width:600px){.fx-table th,.fx-table td{padding:11px 8px;font-size:13px}}
+  </style>
+  <script>
+  (async function(){
+    const rows=document.getElementById("global-fx-rows");
+    const state=document.getElementById("global-fx-state");
+    if(!rows||!state)return;
+    const names={EUR:"Euro",GBP:"Pound sterling",JPY:"Japanese yen",CHF:"Swiss franc",CNY:"Chinese yuan",CAD:"Canadian dollar",AUD:"Australian dollar",NZD:"New Zealand dollar",SGD:"Singapore dollar"};
+    try{
+      const response=await fetch("/api/global-fx",{cache:"no-store"});
+      if(!response.ok)throw new Error("Rates unavailable");
+      const data=await response.json();
+      const order=["EUR","GBP","JPY","CHF","CNY","CAD","AUD","NZD","SGD"];
+      rows.innerHTML=order.filter(code=>Number.isFinite(data.rates[code])).map(code=>"<tr><td>"+names[code]+"</td><td>"+code+"</td><td>"+Number(data.rates[code]).toLocaleString(undefined,{minimumFractionDigits:4,maximumFractionDigits:4})+"</td></tr>").join("");
+      if(!rows.innerHTML)throw new Error("No rate rows");
+      state.textContent="Reference date: "+data.date+" · Base currency: USD";
+      document.getElementById("global-fx-source").textContent="Source: "+data.source+". Figures are shown to four decimal places.";
+    }catch(error){
+      rows.innerHTML="<tr><td colspan='3'>The reference feed is temporarily unavailable. No figures have been estimated.</td></tr>";
+      state.textContent="Data temporarily unavailable";
+    }
+  })();
+  </script>`;
+  return shell(content, "Currencies", "Global Exchange Rates | Atlantic Financial Review", "Daily reference exchange rates for major global currencies.", "/rates");
+}
   const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">CURRENCY & ECONOMY</div><h1>Currency reference monitor</h1><p>Indicative reference conversions for selected currencies, with context on how to interpret exchange-rate quotes.</p></div></section>
   <main class="wrap"><div style="max-width:900px;margin:auto">${rateSection()}<div class="article" style="margin-top:20px"><h2>Understanding the figures</h2><p>The figures above are indicative mid-market conversions derived from a public currency-data service. They are useful as a general reference, but they are not official central-bank quotations and are not guaranteed transaction rates.</p><h2>Why quoted rates differ</h2><p>Commercial banks, payment networks and currency providers may apply different spreads, fees, cut-off times and settlement terms. The rate shown by a data service may therefore differ from the amount available to a customer.</p><h2>Where to verify</h2><p>For decisions, check the relevant central bank, monetary authority or regulated financial institution in the currency jurisdiction. For monetary-policy information, consult the relevant central bank or monetary authority.</p><div class="notice">AFR does not execute currency trades or money transfers. Rates are informational, indicative and may be delayed or unavailable.</div></div></div></main>`;
   return shell(content, "Currency Monitor", "Currency Reference Rates | Atlantic Financial Review", "Indicative reference conversions for selected currencies and guidance on interpreting exchange-rate quotes.", "/rates");
 }
 function marketsPage() {
+  const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">AFR GLOBAL MARKETS BOARD</div><h1>Markets at a glance</h1><p>A structured view of the world's major equity markets, indices, currencies and commodities.</p></div></section>
+  <main class="wrap" style="padding-top:28px;padding-bottom:50px">
+    <div class="market-board-grid">
+      <a class="market-board-card" href="/rates"><span class="board-kicker">FOREIGN EXCHANGE</span><strong>Global currency monitor</strong><span>Daily reference rates for nine major currencies against the US dollar.</span><b>OPEN CURRENCY BOARD →</b></a>
+      <div class="market-board-card"><span class="board-kicker">UNITED STATES</span><strong>US equity benchmarks</strong><span>S&amp;P 500 · Nasdaq Composite · Dow Jones Industrial Average</span><b>PRICE FEED TO BE CONNECTED</b></div>
+      <div class="market-board-card"><span class="board-kicker">EUROPE</span><strong>European benchmarks</strong><span>FTSE 100 · DAX · Euro Stoxx 50</span><b>PRICE FEED TO BE CONNECTED</b></div>
+      <div class="market-board-card"><span class="board-kicker">ASIA-PACIFIC</span><strong>Asian benchmarks</strong><span>Nikkei 225 · Hang Seng · Shanghai Composite</span><b>PRICE FEED TO BE CONNECTED</b></div>
+    </div>
+    <section class="rate-panel" style="margin-top:22px">
+      <div class="rate-head"><div><div class="eyebrow">GLOBAL MARKET WATCHLIST</div><h2>Markets and assets covered by AFR</h2></div><span class="market-tag">FEED STATUS</span></div>
+      <div class="asset-watch-grid">
+        <div class="asset-watch"><b>US equities</b><span>Apple · Microsoft · Nvidia · Amazon · Alphabet · Meta · Tesla · Berkshire Hathaway</span><small>Quote feed pending data-display licensing</small></div>
+        <div class="asset-watch"><b>Commodities</b><span>Gold · Brent crude · WTI crude</span><small>Quote feed pending source verification</small></div>
+        <div class="asset-watch"><b>Global indices</b><span>S&amp;P 500 · Nasdaq · Dow · FTSE 100 · DAX · Nikkei 225 · Hang Seng</span><small>Index values will show source and last update</small></div>
+      </div>
+      <p class="rate-note">AFR will publish market figures only when the source, timestamp, delay status and public-display permissions can be established. No placeholder prices are presented as live market data.</p>
+    </section>
+    <section class="article" style="margin-top:22px"><h2>Market information, properly labelled</h2><p>Market prices may be real-time, delayed or end-of-day. AFR will identify which applies to each feed. Currency reference rates are published separately from tradable foreign-exchange quotes.</p><p>For official market information, readers should also consult the relevant exchange, index provider or regulator.</p></section>
+  </main>
+  <style>
+  .market-board-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .market-board-card{display:flex;flex-direction:column;gap:9px;background:#fff;border:1px solid #e5eaf0;border-top:3px solid #d7ad57;padding:20px;min-height:160px}
+  .market-board-card strong{font:700 21px Georgia,serif;color:#152238}
+  .market-board-card span:not(.board-kicker){font-size:14px;color:#637187}
+  .market-board-card b{font-size:10px;letter-spacing:.8px;color:#1769aa;margin-top:auto}
+  .board-kicker{font-size:10px;letter-spacing:1.2px;font-weight:700;color:#8a6b2e}
+  .asset-watch-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  .asset-watch{background:#f5f7fa;padding:16px;display:flex;flex-direction:column;gap:8px}
+  .asset-watch b{font:700 17px Georgia,serif}
+  .asset-watch span{font-size:13px;color:#637187}
+  .asset-watch small{font-size:11px;color:#8a6b2e;font-weight:700}
+  @media(max-width:650px){.market-board-grid,.asset-watch-grid{grid-template-columns:1fr}.market-board-card{min-height:130px}}
+  </style>`;
+  return shell(content, "Markets", "Global Markets Board | Atlantic Financial Review", "A global markets board covering equities, indices, currencies and commodities.", "/markets");
+}
   const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">GLOBAL MARKETS</div><h1>Markets beyond borders</h1><p>Financial-market coverage and economic context across major regions and asset classes.</p></div></section>
   <main class="wrap"><div class="market-grid">
   <div class="market"><b>United States</b><span>US equities, Federal Reserve policy, Treasury markets and the dollar.</span></div>
@@ -213,9 +292,40 @@ export default {
     }
 
     if (path === "/sitemap.xml") {
-      const urls = ["/", "/features", "/markets", "/about", ...stories.map(s => "/article/" + s.slug)];
+      const urls = ["/", "/features", "/markets", "/rates", "/about", ...stories.map(s => "/article/" + s.slug)];
       const xml = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map(p => `<url><loc>${SITE.domain}${p}</loc></url>`).join("")}</urlset>`;
       return new Response(xml, { headers: { "content-type": "application/xml; charset=utf-8" } });
+    }
+
+    if (path === "/api/global-fx") {
+      try {
+        const upstream = await fetch("https://api.frankfurter.dev/v2/rates?base=USD&quotes=EUR,GBP,JPY,CHF,CNY,CAD,AUD,NZD,SGD", {
+          headers: { "Accept": "application/json" },
+          cf: { cacheTtl: 3600, cacheEverything: true }
+        });
+        if (!upstream.ok) throw new Error("Global FX source unavailable");
+        const rows = await upstream.json();
+        if (!Array.isArray(rows) || !rows.length) throw new Error("Global FX data unavailable");
+        const rates = {};
+        for (const row of rows) {
+          if (row && row.quote && Number.isFinite(Number(row.rate))) rates[row.quote] = Number(row.rate);
+        }
+        return Response.json({
+          base: "USD",
+          date: rows[0].date,
+          rates,
+          source: "Frankfurter · central-bank reference data",
+          type: "daily-reference",
+          fetchedAt: new Date().toISOString()
+        }, {
+          headers: { "Cache-Control": "public, max-age=3600", "Access-Control-Allow-Origin": "*" }
+        });
+      } catch (error) {
+        return Response.json({ error: "Global currency data is temporarily unavailable." }, {
+          status: 503,
+          headers: { "Cache-Control": "no-store", "Access-Control-Allow-Origin": "*" }
+        });
+      }
     }
 
     if (path === "/api/rates") {
@@ -241,7 +351,7 @@ export default {
     let html;
     if (path === "/") html = homePage();
     else if (path === "/features") html = featuresPage();
-    else if (path === "/rates") return Response.redirect(new URL("/markets", url), 301);
+    else if (path === "/rates") html = ratesPage();
     else if (path === "/markets") html = marketsPage();
     else if (path === "/about") html = aboutPage();
     else if (path.startsWith("/article/")) {

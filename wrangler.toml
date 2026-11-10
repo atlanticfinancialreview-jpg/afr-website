@@ -12,3 +12,12 @@ binding = "ASSETS"
 
 [triggers]
 crons = ["0 7 * * *"]
+
+# Preview bindings required by the Cloudflare preview environment.
+[[previews.kv_namespaces]]
+binding = "AFRI_DATA"
+id = "c56df47c447942e38f8053f3590a0542"
+
+[[previews.kv_namespaces]]
+binding = "AFR_DATA"
+id = "c56df47c447942e38f8053f3590a0542"

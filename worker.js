@@ -130,7 +130,7 @@ function ratesPage() {
     <section class="rate-panel" style="margin-bottom:22px">
       <div class="rate-head"><div><div class="eyebrow">FOREIGN EXCHANGE</div><h2>How much is US$1 worth?</h2></div><span class="market-tag">DAILY REFERENCE</span></div>
       <div id="global-fx-state" class="market-note">Loading the latest published reference rates…</div>
-      <div class="fx-table-wrap"><table class="fx-table"><thead><tr><th>Currency</th><th>Code</th><th>Value for US$1</th></tr></thead><tbody id="global-fx-rows"><tr><td colspan="3">Retrieving data…</td></tr></tbody></table></div>
+      <div class="fx-table-wrap"><table class="fx-table"><thead><tr><th>Currency</th><th>Code</th><th>Value for US$1</th><th>Daily change</th></tr></thead><tbody id="global-fx-rows"><tr><td colspan="3">Retrieving data…</td></tr></tbody></table></div>
       <p class="rate-note" id="global-fx-source">Source: Frankfurter, based on central-bank reference data.</p>
       <p class="rate-note">These are daily reference rates, not live dealing prices or guaranteed bank/customer rates. Values may not update on weekends or public holidays.</p>
     </section>
@@ -143,7 +143,7 @@ function ratesPage() {
   .fx-table{width:100%;border-collapse:collapse;min-width:320px}
   .fx-table th,.fx-table td{text-align:left;padding:13px 12px;border-bottom:1px solid #e5eaf0}
   .fx-table th{font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:#637187}
-  .fx-table td:last-child{font-weight:700;font-variant-numeric:tabular-nums}
+  .fx-table td:nth-child(3),.fx-table td:nth-child(4){font-weight:700;font-variant-numeric:tabular-nums}.fx-table td.up{color:#16804a}.fx-table td.down{color:#bd3c3c}.fx-table td.flat{color:#637187}
   @media(max-width:600px){.fx-table th,.fx-table td{padding:11px 8px;font-size:13px}}
   </style>
   <script>
@@ -157,9 +157,14 @@ function ratesPage() {
       if(!response.ok)throw new Error("Rates unavailable");
       const data=await response.json();
       const order=["EUR","GBP","JPY","CHF","CNY","CAD","AUD","NZD","SGD"];
-      rows.innerHTML=order.filter(code=>Number.isFinite(data.rates[code])).map(code=>"<tr><td>"+names[code]+"</td><td>"+code+"</td><td>"+Number(data.rates[code]).toLocaleString(undefined,{minimumFractionDigits:4,maximumFractionDigits:4})+"</td></tr>").join("");
+      rows.innerHTML=order.filter(code=>Number.isFinite(data.rates[code])).map(code=>{
+        const move=data.changes&&data.changes[code];
+        const change=move&&Number.isFinite(move.percent)?((move.percent>0?"+":"")+move.percent.toFixed(2)+"%"):"—";
+        const cls=move&&move.percent>0?"up":move&&move.percent<0?"down":"flat";
+        return "<tr><td>"+names[code]+"</td><td>"+code+"</td><td>"+Number(data.rates[code]).toLocaleString(undefined,{minimumFractionDigits:4,maximumFractionDigits:4})+"</td><td class='"+cls+"'>"+change+"</td></tr>";
+      }).join("");
       if(!rows.innerHTML)throw new Error("No rate rows");
-      state.textContent="Reference date: "+data.date+" · Base currency: USD";
+      state.textContent="Reference date: "+data.date+" · Base currency: USD"+(data.comparisonDate?" · Compared with "+data.comparisonDate:" · Daily comparison will appear when prior data is available");
       document.getElementById("global-fx-source").textContent="Source: "+data.source+". Figures are shown to four decimal places.";
     }catch(error){
       rows.innerHTML="<tr><td colspan='3'>The reference feed is temporarily unavailable. No figures have been estimated.</td></tr>";
@@ -310,14 +315,42 @@ export default {
         for (const row of rows) {
           if (row && row.quote && Number.isFinite(Number(row.rate))) rates[row.quote] = Number(row.rate);
         }
-        return Response.json({
+        const date = rows[0].date;
+        let previous = null;
+        if (env.AFR_DATA) {
+          const latestText = await env.AFR_DATA.get("globalfx:latest");
+          const latest = latestText ? JSON.parse(latestText) : null;
+          if (latest && latest.date !== date) {
+            await env.AFR_DATA.put("globalfx:previous", JSON.stringify(latest));
+            previous = latest;
+          } else {
+            const previousText = await env.AFR_DATA.get("globalfx:previous");
+            previous = previousText ? JSON.parse(previousText) : null;
+          }
+        }
+        const changes = {};
+        for (const code of Object.keys(rates)) {
+          const before = previous && previous.rates ? Number(previous.rates[code]) : NaN;
+          const now = Number(rates[code]);
+          changes[code] = Number.isFinite(before) && before > 0
+            ? { previous: before, change: now - before, percent: ((now - before) / before) * 100 }
+            : null;
+        }
+        const payload = {
           base: "USD",
-          date: rows[0].date,
+          date,
           rates,
+          changes,
+          comparisonDate: previous ? previous.date : null,
           source: "Frankfurter · central-bank reference data",
           type: "daily-reference",
           fetchedAt: new Date().toISOString()
-        }, {
+        };
+        if (env.AFR_DATA) {
+          await env.AFR_DATA.put("globalfx:latest", JSON.stringify(payload));
+          await env.AFR_DATA.put("globalfx:history:" + date, JSON.stringify(payload), { expirationTtl: 60 * 60 * 24 * 400 });
+        }
+        return Response.json(payload, {
           headers: { "Cache-Control": "public, max-age=3600", "Access-Control-Allow-Origin": "*" }
         });
       } catch (error) {

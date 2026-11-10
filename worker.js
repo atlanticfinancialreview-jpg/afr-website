@@ -88,12 +88,20 @@ async function loadRates(){
   const response=await fetch("/api/rates",{headers:{"Accept":"application/json"}});
   if(!response.ok)throw new Error("Rate service unavailable");
   const data=await response.json();
-  if(!data.rates)throw new Error("No rate data");
-  const names=[["USD","US dollar"],["GBP","British pound"],["EUR","Euro"],["CAD","Canadian dollar"]];
-  box.innerHTML=names.map(([code,label])=>{const value=data.rates[code];const shown=value?"₦"+Number(value).toLocaleString("en-NG",{maximumFractionDigits:2}):"Unavailable";return '<div class="rate-box"><small>'+label+' ('+code+')</small><strong>'+shown+'</strong><small>per 1 '+code+'</small></div>'}).join("");
+  if(!data.rates || data.base!=="USD")throw new Error("No global reference-rate data");
+  const names=[["EUR","Euro"],["GBP","British pound"],["JPY","Japanese yen"],["CHF","Swiss franc"],["CNY","Chinese yuan"],["CAD","Canadian dollar"],["AUD","Australian dollar"],["NZD","New Zealand dollar"],["SGD","Singapore dollar"]];
+  box.innerHTML=names.map(([code,label])=>{
+    const value=Number(data.rates[code]);
+    const shown=Number.isFinite(value)&&value>0?value.toLocaleString("en-US",{maximumFractionDigits:4}):"Unavailable";
+    return '<div class="rate-box"><small>'+label+' ('+code+')</small><strong>'+shown+'</strong><small>per 1 USD</small></div>';
+  }).join("");
   const updated=document.getElementById("rate-updated");
-  if(updated)updated.textContent="Indicative mid-market reference · Updated "+new Date(data.updated).toLocaleString();
- }catch(e){box.innerHTML='<div class="rate-box"><small>Currency data</small><strong>Temporarily unavailable</strong></div>';const updated=document.getElementById("rate-updated");if(updated)updated.textContent="Please check again shortly. No rate has been estimated."}
+  if(updated)updated.textContent="Daily reference rates · "+data.updated+" · Source: "+(data.source||"Frankfurter");
+ }catch(e){
+  box.innerHTML='<div class="rate-box"><small>Global currency data</small><strong>Temporarily unavailable</strong></div>';
+  const updated=document.getElementById("rate-updated");
+  if(updated)updated.textContent="No rate has been estimated. Please check again later.";
+ }
 }
 loadRates();
 </script>
@@ -155,26 +163,40 @@ function aboutPage() {
 }
 
 async function getRates() {
-  const upstream = await fetch("https://open.er-api.com/v6/latest/USD", {
+  // Frankfurter provides daily blended reference rates from central banks
+  // and other official sources. These are not executable FX dealing quotes.
+  const quotes = ["EUR", "GBP", "JPY", "CHF", "CNY", "CAD", "AUD", "NZD", "SGD"];
+  const endpoint = "https://api.frankfurter.dev/v2/rates?base=USD&quotes=" + quotes.join(",");
+  const upstream = await fetch(endpoint, {
     headers: { "Accept": "application/json" },
-    cf: { cacheTtl: 900, cacheEverything: true }
+    cf: { cacheTtl: 3600, cacheEverything: true }
   });
-  if (!upstream.ok) throw new Error("Currency service error");
-  const data = await upstream.json();
-  if (data.result !== "success" || !data.rates || !data.rates.NGN) throw new Error("Currency data unavailable");
-  const ngn = Number(data.rates.NGN);
-  const rates = {};
-  for (const code of ["USD", "GBP", "EUR", "CAD"]) {
-    const perUsd = Number(data.rates[code]);
-    rates[code] = code === "USD" ? ngn : (perUsd > 0 ? ngn / perUsd : null);
+  if (!upstream.ok) throw new Error("Reference-rate service error");
+  const rows = await upstream.json();
+  if (!Array.isArray(rows) || rows.length === 0) throw new Error("Reference-rate data unavailable");
+
+  const rates = { USD: 1 };
+  let publishedDate = null;
+  for (const row of rows) {
+    if (row && row.base === "USD" && quotes.includes(row.quote)) {
+      const value = Number(row.rate);
+      if (Number.isFinite(value) && value > 0) {
+        rates[row.quote] = value;
+        if (!publishedDate || row.date > publishedDate) publishedDate = row.date;
+      }
+    }
+  }
+  if (Object.keys(rates).length < 8 || !publishedDate) {
+    throw new Error("Incomplete global reference-rate data");
   }
   return {
     base: "USD",
-    quote: "NGN",
+    quote: "GLOBAL",
     rates,
-    updated: data.time_last_update_utc || new Date().toISOString(),
-    source: "ExchangeRate-API open endpoint",
-    type: "indicative-mid-market"
+    updated: publishedDate,
+    fetchedAt: new Date().toISOString(),
+    source: "Frankfurter blended central-bank reference rates",
+    type: "daily-mid-market-reference"
   };
 }
 

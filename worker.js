@@ -21,8 +21,7 @@ function esc(value) {
 
 function shell(content, active = "Home", title = SITE.name, description = SITE.description, canonicalPath = "/") {
   const nav = [
-    ["Home", "/"], ["Features", "/features"], ["Markets", "/markets"],
-    ["Currency Monitor", "/rates"], ["About", "/about"]
+    ["Home", "/"], ["Features", "/features"], ["Markets", "/markets"], ["About", "/about"]
   ];
   return `<!doctype html>
 <html lang="en">
@@ -77,7 +76,7 @@ footer{background:#041126;color:#d5dfeb;padding:34px 0 20px;border-top:3px solid
 ${content}
 <footer><div class="wrap"><div class="foot-grid">
 <div><div class="brand"><span class="mark">AFR</span><span><span class="brand-name">ATLANTIC FINANCIAL REVIEW</span><span class="brand-tag">GLOBAL FINANCE · BUSINESS · MARKETS</span></span></div><p>Independent global coverage of finance, business, markets and investment.</p></div>
-<div><h3>Explore</h3><div class="foot-links"><a href="/markets">Markets</a><a href="/rates">Currency monitor</a><a href="/features">Global features</a></div></div>
+<div><h3>Explore</h3><div class="foot-links"><a href="/markets">Markets</a><a href="/features">Global features</a></div></div>
 <div><h3>About AFR</h3><div class="foot-links"><a href="/about">About us</a><a href="/about#disclaimer">Editorial disclaimer</a><a href="mailto:editor@atlanticfinancialreview.com">Contact the editor</a></div></div>
 </div><div class="copyright">© ${new Date().getFullYear()} Atlantic Financial Review. Information is for general education and should not be treated as personal financial, investment or tax advice.</div></div></footer>
 <script>
@@ -115,7 +114,7 @@ function homePage() {
   <div class="side-stories">${stories.slice(1,5).map(s=>`<article class="story"><div class="story-image">${imageTag(s.image,s.title)}</div><div class="story-copy"><span class="tag">${esc(s.category)}</span><h3>${esc(s.title)}</h3><p>${esc(s.summary)}</p><a class="text-link" href="/article/${s.slug}">READ MORE →</a></div></article>`).join("")}</div></div>
   <div class="section-head" style="margin-top:38px"><div><h2>More from AFR</h2><p>Explore our complete collection of global features.</p></div><a class="text-link" href="/features">VIEW ALL 20 →</a></div>
   <div class="cards">${stories.slice(5).map(s=>`<a class="feature" href="/article/${s.slug}"><div class="icon">↗</div><h3>${esc(s.title)}</h3><p>${esc(s.summary)}</p></a>`).join("")}</div>
-  ${rateSection()}</main>`;
+  </main>`;
   return shell(content, "Home", "Global Finance, Business & Markets | Atlantic Financial Review", "Global finance, business, markets and perspectives from Atlantic Financial Review.", "/");
 }
 
@@ -127,18 +126,17 @@ function featuresPage() {
 
 function ratesPage() {
   const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">CURRENCY & ECONOMY</div><h1>Currency reference monitor</h1><p>Indicative reference conversions for selected currencies, with context on how to interpret exchange-rate quotes.</p></div></section>
-  <main class="wrap"><div style="max-width:900px;margin:auto">${rateSection()}<div class="article" style="margin-top:20px"><h2>Understanding the figures</h2><p>The figures above are indicative mid-market conversions derived from a public currency-data service. They are useful as a general reference, but they are not official central-bank quotations and are not guaranteed transaction rates.</p><h2>Why quoted rates differ</h2><p>Commercial banks, payment networks and currency providers may apply different spreads, fees, cut-off times and settlement terms. The rate shown by a data service may therefore differ from the amount available to a customer.</p><h2>Where to verify</h2><p>For decisions, check the relevant central bank, monetary authority or regulated financial institution in the currency jurisdiction. For Nigerian monetary-policy information, consult the <a class="text-link" href="https://www.cbn.gov.ng/" target="_blank" rel="noopener">Central Bank of Nigeria</a>.</p><div class="notice">AFR does not execute currency trades or money transfers. Rates are informational, indicative and may be delayed or unavailable.</div></div></div></main>`;
+  <main class="wrap"><div style="max-width:900px;margin:auto">${rateSection()}<div class="article" style="margin-top:20px"><h2>Understanding the figures</h2><p>The figures above are indicative mid-market conversions derived from a public currency-data service. They are useful as a general reference, but they are not official central-bank quotations and are not guaranteed transaction rates.</p><h2>Why quoted rates differ</h2><p>Commercial banks, payment networks and currency providers may apply different spreads, fees, cut-off times and settlement terms. The rate shown by a data service may therefore differ from the amount available to a customer.</p><h2>Where to verify</h2><p>For decisions, check the relevant central bank, monetary authority or regulated financial institution in the currency jurisdiction. For monetary-policy information, consult the relevant central bank or monetary authority.</p><div class="notice">AFR does not execute currency trades or money transfers. Rates are informational, indicative and may be delayed or unavailable.</div></div></div></main>`;
   return shell(content, "Currency Monitor", "Currency Reference Rates | Atlantic Financial Review", "Indicative reference conversions for selected currencies and guidance on interpreting exchange-rate quotes.", "/rates");
 }
 function marketsPage() {
   const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">GLOBAL MARKETS</div><h1>Markets beyond borders</h1><p>Financial-market coverage and economic context across major regions and asset classes.</p></div></section>
   <main class="wrap"><div class="market-grid">
-  <div class="market"><b>Nigeria</b><span>NGX, banking, monetary policy, energy and the wider economy.</span></div>
   <div class="market"><b>United States</b><span>US equities, Federal Reserve policy, Treasury markets and the dollar.</span></div>
   <div class="market"><b>Europe</b><span>European markets, ECB policy, banking and cross-border regulation.</span></div>
   <div class="market"><b>Asia</b><span>Asian equities, trade, currencies and regional economic developments.</span></div>
-  </div><div class="article" style="margin-top:22px"><h2>Our market coverage</h2><p>AFR explains market movements and economic developments in context. This page is a guide to our coverage areas; it does not display live stock prices or investment recommendations.</p><h2>Primary information sources</h2><p>Readers can consult official market and policy sources, including the <a class="text-link" href="https://ngxgroup.com/" target="_blank" rel="noopener">Nigerian Exchange Group</a>, <a class="text-link" href="https://www.sec.gov/" target="_blank" rel="noopener">US Securities and Exchange Commission</a>, <a class="text-link" href="https://www.federalreserve.gov/" target="_blank" rel="noopener">Federal Reserve</a>, <a class="text-link" href="https://www.ecb.europa.eu/" target="_blank" rel="noopener">European Central Bank</a> and <a class="text-link" href="https://www.nasdaq.com/" target="_blank" rel="noopener">Nasdaq</a>.</p></div></main>`;
-  return shell(content, "Markets", "Global Markets | Atlantic Financial Review", "Financial-market coverage across Nigeria, the United States, Europe and Asia.", "/markets");
+  </div><div class="article" style="margin-top:22px"><h2>Our market coverage</h2><p>AFR explains market movements and economic developments in context. This page is a guide to our coverage areas; it does not display live stock prices or investment recommendations.</p><h2>Primary information sources</h2><p>Readers can consult official market and policy sources, <a class="text-link" href="https://www.sec.gov/" target="_blank" rel="noopener">US Securities and Exchange Commission</a>, <a class="text-link" href="https://www.federalreserve.gov/" target="_blank" rel="noopener">Federal Reserve</a>, <a class="text-link" href="https://www.ecb.europa.eu/" target="_blank" rel="noopener">European Central Bank</a> and <a class="text-link" href="https://www.nasdaq.com/" target="_blank" rel="noopener">Nasdaq</a>.</p></div></main>`;
+  return shell(content, "Markets", "Global Markets | Atlantic Financial Review", "Financial-market coverage across the United States, Europe and Asia.", "/markets");
 }
 
 function articlePage(story) {
@@ -215,7 +213,7 @@ export default {
     }
 
     if (path === "/sitemap.xml") {
-      const urls = ["/", "/features", "/rates", "/markets", "/about", ...stories.map(s => "/article/" + s.slug)];
+      const urls = ["/", "/features", "/markets", "/about", ...stories.map(s => "/article/" + s.slug)];
       const xml = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map(p => `<url><loc>${SITE.domain}${p}</loc></url>`).join("")}</urlset>`;
       return new Response(xml, { headers: { "content-type": "application/xml; charset=utf-8" } });
     }
@@ -243,8 +241,7 @@ export default {
     let html;
     if (path === "/") html = homePage();
     else if (path === "/features") html = featuresPage();
-    else if (path === "/diaspora") return Response.redirect(new URL("/features", url), 301);
-    else if (path === "/rates") html = ratesPage();
+    else if (path === "/rates") return Response.redirect(new URL("/markets", url), 301);
     else if (path === "/markets") html = marketsPage();
     else if (path === "/about") html = aboutPage();
     else if (path.startsWith("/article/")) {

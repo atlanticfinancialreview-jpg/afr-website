@@ -179,50 +179,76 @@ function ratesPage() {
   return shell(content, "Currency Monitor", "Currency Reference Rates | Atlantic Financial Review", "Indicative reference conversions for selected currencies and guidance on interpreting exchange-rate quotes.", "/rates");
 }
 function marketsPage() {
-  const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">AFR GLOBAL MARKETS BOARD</div><h1>Markets at a glance</h1><p>A structured view of the world's major equity markets, indices, currencies and commodities.</p></div></section>
-  <main class="wrap" style="padding-top:28px;padding-bottom:50px">
-    <div class="market-board-grid">
-      <a class="market-board-card" href="/rates"><span class="board-kicker">FOREIGN EXCHANGE</span><strong>Global currency monitor</strong><span>Daily reference rates for nine major currencies against the US dollar.</span><b>OPEN CURRENCY BOARD →</b></a>
-      <div class="market-board-card"><span class="board-kicker">UNITED STATES</span><strong>US equity benchmarks</strong><span>S&amp;P 500 · Nasdaq Composite · Dow Jones Industrial Average</span><b>PRICE FEED TO BE CONNECTED</b></div>
-      <div class="market-board-card"><span class="board-kicker">EUROPE</span><strong>European benchmarks</strong><span>FTSE 100 · DAX · Euro Stoxx 50</span><b>PRICE FEED TO BE CONNECTED</b></div>
-      <div class="market-board-card"><span class="board-kicker">ASIA-PACIFIC</span><strong>Asian benchmarks</strong><span>Nikkei 225 · Hang Seng · Shanghai Composite</span><b>PRICE FEED TO BE CONNECTED</b></div>
-    </div>
-    <section class="rate-panel" style="margin-top:22px">
-      <div class="rate-head"><div><div class="eyebrow">GLOBAL MARKET WATCHLIST</div><h2>Markets and assets covered by AFR</h2></div><span class="market-tag">FEED STATUS</span></div>
-      <div class="asset-watch-grid">
-        <div class="asset-watch"><b>US equities</b><span>Apple · Microsoft · Nvidia · Amazon · Alphabet · Meta · Tesla · Berkshire Hathaway</span><small>Quote feed pending data-display licensing</small></div>
-        <div class="asset-watch"><b>Commodities</b><span>Gold · Brent crude · WTI crude</span><small>Quote feed pending source verification</small></div>
-        <div class="asset-watch"><b>Global indices</b><span>S&amp;P 500 · Nasdaq · Dow · FTSE 100 · DAX · Nikkei 225 · Hang Seng</span><small>Index values will show source and last update</small></div>
-      </div>
-      <p class="rate-note">AFR will publish market figures only when the source, timestamp, delay status and public-display permissions can be established. No placeholder prices are presented as live market data.</p>
+  const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">AFR GLOBAL MARKETS BOARD</div><h1>Global markets, at a glance</h1><p>A colourful, clear view of major currencies and the world's financial markets.</p></div></section>
+  <main class="wrap afr-markets" style="padding-top:26px;padding-bottom:50px">
+    <section class="dash-intro"><div><span class="dash-kicker">THE AFR MARKET PULSE</span><h2>World markets in one view</h2><p>Daily currency reference data, with market coverage clearly distinguished from live prices.</p></div><div class="dash-live"><i></i> CURRENCY DATA CONNECTED</div></section>
+    <section class="dash-section">
+      <div class="dash-section-head"><div><span class="dash-kicker">01 / FOREIGN EXCHANGE</span><h2>Global currency monitor</h2><p>How much each currency is worth against US$1</p></div><a href="/rates" class="dash-link">FULL CURRENCY TABLE →</a></div>
+      <div id="afr-dash-fx-state" class="dash-state">Fetching latest published reference rates…</div>
+      <div id="afr-dash-fx" class="dash-fx-grid"><div class="dash-fx-card"><small>EUR · EURO</small><strong>Loading…</strong><span>Per US$1</span></div><div class="dash-fx-card"><small>GBP · POUND</small><strong>Loading…</strong><span>Per US$1</span></div><div class="dash-fx-card"><small>JPY · YEN</small><strong>Loading…</strong><span>Per US$1</span></div><div class="dash-fx-card"><small>CAD · CANADIAN DOLLAR</small><strong>Loading…</strong><span>Per US$1</span></div><div class="dash-fx-card"><small>CHF · SWISS FRANC</small><strong>Loading…</strong><span>Per US$1</span></div><div class="dash-fx-card"><small>CNY · CHINESE YUAN</small><strong>Loading…</strong><span>Per US$1</span></div><div class="dash-fx-card"><small>AUD · AUSTRALIAN DOLLAR</small><strong>Loading…</strong><span>Per US$1</span></div><div class="dash-fx-card"><small>SGD · SINGAPORE DOLLAR</small><strong>Loading…</strong><span>Per US$1</span></div></div>
+      <p class="dash-foot" id="afr-dash-fx-source">Source: Frankfurter daily reference data. Not transaction rates.</p>
     </section>
-    <section class="article" style="margin-top:22px"><h2>Market information, properly labelled</h2><p>Market prices may be real-time, delayed or end-of-day. AFR will identify which applies to each feed. Currency reference rates are published separately from tradable foreign-exchange quotes.</p><p>For official market information, readers should also consult the relevant exchange, index provider or regulator.</p></section>
+    <section class="dash-section">
+      <div class="dash-section-head"><div><span class="dash-kicker">02 / EQUITY MARKETS</span><h2>Regional market watch</h2><p>Key indices AFR follows around the world</p></div></div>
+      <div class="dash-region-grid">
+        <article class="dash-region us"><span>UNITED STATES</span><h3>Wall Street</h3><p>S&amp;P 500 · Nasdaq Composite · Dow Jones</p><b>Market coverage</b></article>
+        <article class="dash-region eu"><span>EUROPE</span><h3>European markets</h3><p>FTSE 100 · DAX · Euro Stoxx 50</p><b>Market coverage</b></article>
+        <article class="dash-region asia"><span>ASIA-PACIFIC</span><h3>Asian markets</h3><p>Nikkei 225 · Hang Seng · Shanghai Composite</p><b>Market coverage</b></article>
+      </div>
+      <p class="dash-disclaimer">Index price feeds are not yet connected. No live or delayed index prices are being invented or displayed.</p>
+    </section>
+    <section class="dash-section">
+      <div class="dash-section-head"><div><span class="dash-kicker">03 / ASSETS TO WATCH</span><h2>Companies and commodities</h2><p>Global assets covered by AFR's editorial desk</p></div></div>
+      <div class="dash-assets"><div class="dash-asset gold"><span>COMMODITIES</span><strong>Gold &amp; precious metals</strong><small>Coverage · price feed pending</small></div><div class="dash-asset oil"><span>ENERGY</span><strong>Brent &amp; WTI crude oil</strong><small>Coverage · price feed pending</small></div><div class="dash-asset tech"><span>GLOBAL COMPANIES</span><strong>Leading listed companies</strong><small>Coverage · quote feed pending</small></div></div>
+    </section>
+    <section class="dash-note"><strong>How to use this board</strong><p>Currency figures are daily reference conversions supplied by Frankfurter and may not update on weekends or public holidays. They are not official central-bank quotations or guaranteed dealing rates. Equity and commodity sections identify AFR's coverage areas; live market prices will appear only when a reliable, appropriately licensed data source is connected.</p></section>
   </main>
   <style>
-  .market-board-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-  .market-board-card{display:flex;flex-direction:column;gap:9px;background:#fff;border:1px solid #e5eaf0;border-top:3px solid #d7ad57;padding:20px;min-height:160px}
-  .market-board-card strong{font:700 21px Georgia,serif;color:#152238}
-  .market-board-card span:not(.board-kicker){font-size:14px;color:#637187}
-  .market-board-card b{font-size:10px;letter-spacing:.8px;color:#1769aa;margin-top:auto}
-  .board-kicker{font-size:10px;letter-spacing:1.2px;font-weight:700;color:#8a6b2e}
-  .asset-watch-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-  .asset-watch{background:#f5f7fa;padding:16px;display:flex;flex-direction:column;gap:8px}
-  .asset-watch b{font:700 17px Georgia,serif}
-  .asset-watch span{font-size:13px;color:#637187}
-  .asset-watch small{font-size:11px;color:#8a6b2e;font-weight:700}
-  @media(max-width:650px){.market-board-grid,.asset-watch-grid{grid-template-columns:1fr}.market-board-card{min-height:130px}}
-  </style>`;
-  return shell(content, "Markets", "Global Markets Board | Atlantic Financial Review", "A global markets board covering equities, indices, currencies and commodities.", "/markets");
+  .afr-markets{--dnavy:#092449;--dblue:#1769aa;--dteal:#087f8c;--dgreen:#16845b;--dgold:#c58b25}
+  .dash-intro{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;background:linear-gradient(115deg,#082449,#135b83 68%,#087f8c);color:white;padding:25px 28px;border-radius:12px;box-shadow:0 8px 24px #0b31551c}
+  .dash-kicker{font-size:10px;letter-spacing:1.7px;font-weight:800;color:#b9862d}
+  .dash-intro .dash-kicker{color:#f3cf83}.dash-intro h2{font:700 27px Georgia,serif;margin:5px 0}.dash-intro p{margin:0;color:#d9e8f4;font-size:13px}
+  .dash-live{background:#ffffff18;border:1px solid #ffffff42;border-radius:30px;padding:9px 13px;font-size:10px;font-weight:800;letter-spacing:.6px}.dash-live i{display:inline-block;width:8px;height:8px;background:#5be0a3;border-radius:50%;margin-right:6px}
+  .dash-section{margin-top:25px;background:#fff;border:1px solid #e4eaf1;border-radius:12px;padding:22px;box-shadow:0 4px 15px #102b5208}
+  .dash-section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:15px}.dash-section-head h2{font:700 24px Georgia,serif;color:#102b52;margin:3px 0}.dash-section-head p{font-size:12px;color:#69788c;margin:0}.dash-link{font-size:11px;font-weight:800;color:#1769aa}
+  .dash-state{font-size:12px;color:#64758a;margin:0 0 12px}
+  .dash-fx-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
+  .dash-fx-card{padding:15px;border-radius:9px;background:linear-gradient(145deg,#f1f7fc,#e9f3f7);border:1px solid #dceaf1;border-left:4px solid #168b91;min-width:0}
+  .dash-fx-card:nth-child(4n+2){background:linear-gradient(145deg,#f1f5ff,#e9efff);border-left-color:#4777c7}
+  .dash-fx-card:nth-child(4n+3){background:linear-gradient(145deg,#f1faf5,#e7f5ec);border-left-color:#299765}
+  .dash-fx-card:nth-child(4n+4){background:linear-gradient(145deg,#fff8eb,#fff1d8);border-left-color:#d49a36}
+  .dash-fx-card small{display:block;font-size:9px;letter-spacing:.8px;font-weight:800;color:#586a80}.dash-fx-card strong{display:block;font:700 clamp(19px,2.4vw,25px) Georgia,serif;color:#102b52;margin:9px 0 3px;overflow-wrap:anywhere}.dash-fx-card span{font-size:10px;color:#718096}
+  .dash-foot,.dash-disclaimer{font-size:11px;color:#758398;margin:12px 0 0}
+  .dash-region-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  .dash-region{padding:19px;border-radius:10px;color:#fff;min-height:148px}.dash-region.us{background:linear-gradient(135deg,#173e75,#2778b9)}.dash-region.eu{background:linear-gradient(135deg,#174d5d,#168b91)}.dash-region.asia{background:linear-gradient(135deg,#64421c,#c18a32)}
+  .dash-region span,.dash-asset span{font-size:9px;letter-spacing:1.2px;font-weight:800;opacity:.85}.dash-region h3{font:700 21px Georgia,serif;margin:7px 0}.dash-region p{font-size:12px;color:#edf5fb;margin:0 0 12px}.dash-region b{font-size:10px;color:#fff4d7}
+  .dash-assets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.dash-asset{padding:19px;border-radius:10px;display:flex;flex-direction:column;gap:8px;min-height:120px;color:#fff}.dash-asset.gold{background:linear-gradient(135deg,#78551b,#d09b3d)}.dash-asset.oil{background:linear-gradient(135deg,#173d53,#267b8a)}.dash-asset.tech{background:linear-gradient(135deg,#373d79,#6877c4)}.dash-asset strong{font:700 18px Georgia,serif}.dash-asset small{font-size:10px;color:#fff2d9}
+  .dash-note{margin-top:20px;background:#eef4f8;border-left:4px solid #168b91;padding:16px 19px;border-radius:5px}.dash-note strong{font:700 16px Georgia,serif;color:#102b52}.dash-note p{font-size:12px;color:#586a80;margin:5px 0 0}
+  @media(max-width:760px){.dash-fx-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dash-region-grid,.dash-assets{grid-template-columns:1fr}.dash-section{padding:16px}.dash-intro{padding:21px}.dash-section-head h2{font-size:21px}}
+  </style>
+  <script>
+  (async function(){
+    const grid=document.getElementById("afr-dash-fx"),state=document.getElementById("afr-dash-fx-state");
+    if(!grid||!state)return;
+    const names={EUR:"EURO",GBP:"POUND STERLING",JPY:"JAPANESE YEN",CHF:"SWISS FRANC",CNY:"CHINESE YUAN",CAD:"CANADIAN DOLLAR",AUD:"AUSTRALIAN DOLLAR",NZD:"NEW ZEALAND DOLLAR",SGD:"SINGAPORE DOLLAR"};
+    const order=["EUR","GBP","JPY","CHF","CNY","CAD","AUD","NZD","SGD"];
+    try{
+      const response=await fetch("/api/global-fx",{cache:"no-store"});
+      if(!response.ok)throw new Error("Feed unavailable");
+      const data=await response.json();
+      const cards=order.filter(code=>Number.isFinite(data.rates&&data.rates[code])).map(code=>"<div class='dash-fx-card'><small>"+code+" · "+names[code]+"</small><strong>"+Number(data.rates[code]).toLocaleString(undefined,{minimumFractionDigits:4,maximumFractionDigits:4})+"</strong><span>Units per US$1</span></div>").join("");
+      if(!cards)throw new Error("No published figures");
+      grid.innerHTML=cards;
+      state.textContent="Source date: "+data.date+" · Base currency: USD";
+      document.getElementById("afr-dash-fx-source").textContent="Source: "+data.source+". Daily reference rates; not transaction prices.";
+    }catch(e){
+      grid.innerHTML="<div class='dash-fx-card' style='grid-column:1/-1'><strong>Reference data temporarily unavailable</strong><span>No figures have been estimated.</span></div>";
+      state.textContent="Currency feed unavailable at this time.";
+    }
+  })();
+  </script>`;
+  return shell(content, "Markets", "Global Markets Board | Atlantic Financial Review", "A colourful global markets dashboard with daily currency reference rates.", "/markets");
 }
-  const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">GLOBAL MARKETS</div><h1>Markets beyond borders</h1><p>Financial-market coverage and economic context across major regions and asset classes.</p></div></section>
-  <main class="wrap"><div class="market-grid">
-  <div class="market"><b>United States</b><span>US equities, Federal Reserve policy, Treasury markets and the dollar.</span></div>
-  <div class="market"><b>Europe</b><span>European markets, ECB policy, banking and cross-border regulation.</span></div>
-  <div class="market"><b>Asia</b><span>Asian equities, trade, currencies and regional economic developments.</span></div>
-  </div><div class="article" style="margin-top:22px"><h2>Our market coverage</h2><p>AFR explains market movements and economic developments in context. This page is a guide to our coverage areas; it does not display live stock prices or investment recommendations.</p><h2>Primary information sources</h2><p>Readers can consult official market and policy sources, <a class="text-link" href="https://www.sec.gov/" target="_blank" rel="noopener">US Securities and Exchange Commission</a>, <a class="text-link" href="https://www.federalreserve.gov/" target="_blank" rel="noopener">Federal Reserve</a>, <a class="text-link" href="https://www.ecb.europa.eu/" target="_blank" rel="noopener">European Central Bank</a> and <a class="text-link" href="https://www.nasdaq.com/" target="_blank" rel="noopener">Nasdaq</a>.</p></div></main>`;
-  return shell(content, "Markets", "Global Markets | Atlantic Financial Review", "Financial-market coverage across the United States, Europe and Asia.", "/markets");
-}
-
 function articlePage(story) {
   const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">AFR KNOWLEDGE DESK</div><p>Independent explainers for informed financial decisions.</p></div></section>
   <main class="wrap"><article class="article"><div class="tag">${story.category}</div><h1>${esc(story.title)}</h1><p class="intro">${esc(story.summary)}</p><div class="article-meta">AFR Editorial Desk · ${story.date} · ${story.read}</div>${imageTag(story.image,story.title,"article-hero-image")}${story.body.map(([h,p])=>`<h2>${esc(h)}</h2><p>${esc(p)}</p>`).join("")}${story.sources?.length ? `<div class="notice"><h2>Sources and further reading</h2><ul>${story.sources.map(source=>`<li><a class="text-link" href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">${esc(source.title)}</a></li>`).join("")}</ul></div>` : ""}<div class="notice">This article is general information, not individual financial, legal or tax advice. Check current rules and consult a qualified professional where necessary.</div><p style="margin-top:25px"><a class="text-link" href="/features">← BACK TO ALL FEATURES</a></p></article></main>`;

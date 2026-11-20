@@ -151,12 +151,12 @@ function ratesPage() {
     const rows=document.getElementById("global-fx-rows");
     const state=document.getElementById("global-fx-state");
     if(!rows||!state)return;
-    const names={EUR:"Euro",GBP:"Pound sterling",JPY:"Japanese yen",CHF:"Swiss franc",CNY:"Chinese yuan",CAD:"Canadian dollar",AUD:"Australian dollar",NZD:"New Zealand dollar",SGD:"Singapore dollar"};
+    const names={EUR:"Euro",GBP:"Pound sterling",JPY:"Japanese yen",CHF:"Swiss franc",CNY:"Chinese yuan",CAD:"Canadian dollar",AUD:"Australian dollar",NZD:"New Zealand dollar",SGD:"Singapore dollar",HKD:"Hong Kong dollar",SEK:"Swedish krona",NOK:"Norwegian krone",DKK:"Danish krone",PLN:"Polish zloty",CZK:"Czech koruna",HUF:"Hungarian forint",TRY:"Turkish lira",MXN:"Mexican peso",BRL:"Brazilian real",ZAR:"South African rand",INR:"Indian rupee",KRW:"South Korean won",THB:"Thai baht",IDR:"Indonesian rupiah",PHP:"Philippine peso",MYR:"Malaysian ringgit"};
     try{
       const response=await fetch("/api/global-fx",{cache:"no-store"});
       if(!response.ok)throw new Error("Rates unavailable");
       const data=await response.json();
-      const order=["EUR","GBP","JPY","CHF","CNY","CAD","AUD","NZD","SGD"];
+      const order=["EUR","GBP","JPY","CHF","CNY","CAD","AUD","NZD","SGD","HKD","SEK","NOK","DKK","PLN","CZK","HUF","TRY","MXN","BRL","ZAR","INR","KRW","THB","IDR","PHP","MYR"];
       rows.innerHTML=order.filter(code=>Number.isFinite(data.rates[code])).map(code=>{
         const move=data.changes&&data.changes[code];
         const change=move&&Number.isFinite(move.percent)?((move.percent>0?"+":"")+move.percent.toFixed(2)+"%"):"—";
@@ -230,8 +230,8 @@ function marketsPage() {
   (async function(){
     const grid=document.getElementById("afr-dash-fx"),state=document.getElementById("afr-dash-fx-state");
     if(!grid||!state)return;
-    const names={EUR:"EURO",GBP:"POUND STERLING",JPY:"JAPANESE YEN",CHF:"SWISS FRANC",CNY:"CHINESE YUAN",CAD:"CANADIAN DOLLAR",AUD:"AUSTRALIAN DOLLAR",NZD:"NEW ZEALAND DOLLAR",SGD:"SINGAPORE DOLLAR"};
-    const order=["EUR","GBP","JPY","CHF","CNY","CAD","AUD","NZD","SGD"];
+    const names={EUR:"EURO",GBP:"POUND STERLING",JPY:"JAPANESE YEN",CHF:"SWISS FRANC",CNY:"CHINESE YUAN",CAD:"CANADIAN DOLLAR",AUD:"AUSTRALIAN DOLLAR",NZD:"NEW ZEALAND DOLLAR",SGD:"SINGAPORE DOLLAR",HKD:"HONG KONG DOLLAR",SEK:"SWEDISH KRONA",NOK:"NORWEGIAN KRONE",DKK:"DANISH KRONE",PLN:"POLISH ZLOTY",CZK:"CZECH KORUNA",HUF:"HUNGARIAN FORINT",TRY:"TURKISH LIRA",MXN:"MEXICAN PESO",BRL:"BRAZILIAN REAL",ZAR:"SOUTH AFRICAN RAND",INR:"INDIAN RUPEE",KRW:"SOUTH KOREAN WON",THB:"THAI BAHT",IDR:"INDONESIAN RUPIAH",PHP:"PHILIPPINE PESO",MYR:"MALAYSIAN RINGGIT"};
+    const order=["EUR","GBP","JPY","CHF","CNY","CAD","AUD","NZD","SGD","HKD","SEK","NOK","DKK","PLN","CZK","HUF","TRY","MXN","BRL","ZAR","INR","KRW","THB","IDR","PHP","MYR"];
     try{
       const response=await fetch("/api/global-fx",{cache:"no-store"});
       if(!response.ok)throw new Error("Feed unavailable");
@@ -287,7 +287,7 @@ async function getRates() {
 
 
 async function refreshGlobalFx(env) {
-  const upstream = await fetch("https://api.frankfurter.dev/v2/rates?base=USD&quotes=EUR,GBP,JPY,CHF,CNY,CAD,AUD,NZD,SGD", {
+  const upstream = await fetch("https://api.frankfurter.dev/v2/rates?base=USD&quotes=EUR,GBP,JPY,CHF,CNY,CAD,AUD,NZD,SGD,HKD,SEK,NOK,DKK,PLN,CZK,HUF,TRY,MXN,BRL,ZAR,INR,KRW,THB,IDR,PHP,MYR", {
     headers: { "Accept": "application/json" },
     cf: { cacheTtl: 3600, cacheEverything: true }
   });

@@ -174,10 +174,6 @@ function ratesPage() {
   </script>`;
   return shell(content, "Currencies", "Global Exchange Rates | Atlantic Financial Review", "Daily reference exchange rates for major global currencies.", "/rates");
 }
-  const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">CURRENCY & ECONOMY</div><h1>Currency reference monitor</h1><p>Indicative reference conversions for selected currencies, with context on how to interpret exchange-rate quotes.</p></div></section>
-  <main class="wrap"><div style="max-width:900px;margin:auto">${rateSection()}<div class="article" style="margin-top:20px"><h2>Understanding the figures</h2><p>The figures above are indicative mid-market conversions derived from a public currency-data service. They are useful as a general reference, but they are not official central-bank quotations and are not guaranteed transaction rates.</p><h2>Why quoted rates differ</h2><p>Commercial banks, payment networks and currency providers may apply different spreads, fees, cut-off times and settlement terms. The rate shown by a data service may therefore differ from the amount available to a customer.</p><h2>Where to verify</h2><p>For decisions, check the relevant central bank, monetary authority or regulated financial institution in the currency jurisdiction. For monetary-policy information, consult the relevant central bank or monetary authority.</p><div class="notice">AFR does not execute currency trades or money transfers. Rates are informational, indicative and may be delayed or unavailable.</div></div></div></main>`;
-  return shell(content, "Currency Monitor", "Currency Reference Rates | Atlantic Financial Review", "Indicative reference conversions for selected currencies and guidance on interpreting exchange-rate quotes.", "/rates");
-}
 function marketsPage() {
   const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">AFR GLOBAL MARKETS BOARD</div><h1>Global markets, at a glance</h1><p>A colourful, clear view of major currencies and the world's financial markets.</p></div></section>
   <main class="wrap afr-markets" style="padding-top:26px;padding-bottom:50px">

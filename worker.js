@@ -291,9 +291,15 @@ function articlePage(story) {
     "headline": story.title,
     "description": story.summary,
     "image": SITE.domain + "/images/" + story.image,
-    "author": {"@type":"Organization","name":"AFR Editorial Desk"},
+    "author": {"@type":"Organization","name":"AFR Editorial Desk","url":SITE.domain + "/about"},
     "publisher": {"@type":"Organization","name":SITE.name,"url":SITE.domain},
     "articleSection": story.category,
+    "citation": (story.sources || []).map(source => ({"@type":"CreativeWork","name":source.title,"url":source.url})),
+    "articleBody": (story.body || []).map(section => section[1]).join(" "),
+    "inLanguage": "en",
+    "isAccessibleForFree": true,
+    ...(story.dateISO ? {"datePublished": story.dateISO} : {}),
+    ...(story.updatedISO ? {"dateModified": story.updatedISO} : {}),
     "mainEntityOfPage": {"@type":"WebPage","@id":SITE.domain + "/article/" + story.slug}
   }).replace(/</g,"\\u003c");
   const relatedLinks = relatedStories.map(item => '<li><a class="text-link" href="/article/' + item.slug + '">' + esc(item.title) + '</a> — ' + esc(item.summary) + '</li>').join("");
@@ -301,6 +307,9 @@ function articlePage(story) {
   <main class="wrap"><article class="article"><div class="tag">${esc(story.category)}</div><h1>${esc(story.title)}</h1><p class="intro">${esc(story.summary)}</p><div class="article-meta">Published: ${esc(story.date)} · By AFR Editorial Desk · ${esc(story.read)}</div>${imageTag(story.image,story.title,"article-hero-image")}${story.body.map(([h,p])=>`<h2>${esc(h)}</h2><p>${esc(p)}</p>`).join("")}${story.sources?.length ? `<div class="notice"><h2>Sources and further reading</h2><ul>${story.sources.map(source=>`<li><a class="text-link" href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">${esc(source.title)}</a></li>`).join("")}</ul></div>` : ""}<div class="notice"><h2>Editorial note</h2>This article is general information, not individual financial, legal or tax advice. Check current rules and consult a qualified professional where necessary.</div><div class="notice"><h2>Continue reading</h2><ul>${relatedLinks}</ul></div><p style="margin-top:25px"><a class="text-link" href="/features">← BACK TO ALL FEATURES</a></p></article></main>`;
   return shell(content, "Features", story.title + " | Atlantic Financial Review", story.summary, "/article/" + story.slug, "article").replace("</head>", `<meta property="og:image" content="${SITE.domain}/images/${encodeURIComponent(story.image)}">
 <meta name="author" content="AFR Editorial Desk">
+<meta property="article:section" content="${esc(story.category)}">
+${story.dateISO ? `<meta property="article:published_time" content="${story.dateISO}">` : ""}
+${story.updatedISO ? `<meta property="article:modified_time" content="${story.updatedISO}">` : ""}
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">${schema}</script>
 </head>`);

@@ -19,7 +19,7 @@ function esc(value) {
   })[c]);
 }
 
-function shell(content, active = "Home", title = SITE.name, description = SITE.description, canonicalPath = "/") {
+function shell(content, active = "Home", title = SITE.name, description = SITE.description, canonicalPath = "/", ogType = "website") {
   const nav = [
     ["Home", "/"], ["Features", "/features"], ["Markets", "/markets"], ["Currencies", "/rates"], ["About", "/about"]
   ];
@@ -35,7 +35,7 @@ function shell(content, active = "Home", title = SITE.name, description = SITE.d
 <meta name="twitter:card" content="summary">
 <meta name="theme-color" content="#071a36">
 <link rel="canonical" href="${SITE.domain}${canonicalPath}">
-<meta property="og:type" content="website">
+<meta property="og:type" content="${esc(ogType)}">
 <meta property="og:site_name" content="${SITE.name}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
@@ -299,8 +299,7 @@ function articlePage(story) {
   const relatedLinks = relatedStories.map(item => '<li><a class="text-link" href="/article/' + item.slug + '">' + esc(item.title) + '</a> — ' + esc(item.summary) + '</li>').join("");
   const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">AFR KNOWLEDGE DESK</div><p>Independent explainers for informed financial decisions.</p></div></section>
   <main class="wrap"><article class="article"><div class="tag">${esc(story.category)}</div><h1>${esc(story.title)}</h1><p class="intro">${esc(story.summary)}</p><div class="article-meta">Published: ${esc(story.date)} · By AFR Editorial Desk · ${esc(story.read)}</div>${imageTag(story.image,story.title,"article-hero-image")}${story.body.map(([h,p])=>`<h2>${esc(h)}</h2><p>${esc(p)}</p>`).join("")}${story.sources?.length ? `<div class="notice"><h2>Sources and further reading</h2><ul>${story.sources.map(source=>`<li><a class="text-link" href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">${esc(source.title)}</a></li>`).join("")}</ul></div>` : ""}<div class="notice"><h2>Editorial note</h2>This article is general information, not individual financial, legal or tax advice. Check current rules and consult a qualified professional where necessary.</div><div class="notice"><h2>Continue reading</h2><ul>${relatedLinks}</ul></div><p style="margin-top:25px"><a class="text-link" href="/features">← BACK TO ALL FEATURES</a></p></article></main>`;
-  return shell(content, "Features", story.title + " | Atlantic Financial Review", story.summary, "/article/" + story.slug).replace("</head>", `<meta property="og:type" content="article">
-<meta property="og:image" content="${SITE.domain}/images/${encodeURIComponent(story.image)}">
+  return shell(content, "Features", story.title + " | Atlantic Financial Review", story.summary, "/article/" + story.slug, "article").replace("</head>", `<meta property="og:image" content="${SITE.domain}/images/${encodeURIComponent(story.image)}">
 <meta name="author" content="AFR Editorial Desk">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">${schema}</script>

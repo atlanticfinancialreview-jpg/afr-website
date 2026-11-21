@@ -110,7 +110,7 @@ function rateSection() {
 
 function homePage() {
   const lead = stories[0];
-  const content = `<section class="hero"><div class="wrap"><div class="eyebrow">THE AFR GLOBAL BRIEFING</div><h1>Global finance. Business. Markets. Perspectives.</h1><p>Independent editorial coverage of the forces shaping economies, capital, companies and the decisions that connect markets around the world.</p><div class="hero-actions"><a class="btn" href="/features">Explore all features</a><a class="btn secondary" href="/markets">Explore markets</a></div></div></section>
+  const content = `<section class="hero"><div class="wrap"><div class="eyebrow">THE AFR GLOBAL BRIEFING</div><h1>Global finance. Business. Markets. Perspectives.</h1><p>Independent editorial coverage of the forces shaping economies, capital, companies and the decisions that connect markets around the world.</p><div class="hero-actions"><a class="btn" href="/rates">Today’s exchange rates</a><a class="btn secondary" href="/features">Explore all features</a></div></div></section>
   <div class="ticker"><div class="wrap ticker-inner"><span class="ticker-label">AFR COVERAGE</span><span class="ticker-item"><strong>ECONOMY</strong> <span>Growth · Inflation</span></span><span class="ticker-item"><strong>MARKETS</strong> <span>Equities · Bonds</span></span><span class="ticker-item"><strong>FINANCE</strong> <span>Banking · Currencies</span></span><span class="ticker-item"><strong>BUSINESS</strong> <span>Technology · Energy</span></span></div></div>
   <main class="wrap"><div class="section-head"><div><h2>Featured analysis</h2><p>Clear explanations of the developments reshaping global finance and business.</p></div><a class="text-link" href="/features">ALL FEATURES →</a></div>
   <div class="grid"><article class="lead"><div class="lead-visual">${imageTag(lead.image,lead.title,"editorial-image")}</div><div class="lead-copy"><span class="tag">FEATURED · ${esc(lead.category)}</span><h2>${esc(lead.title)}</h2><p>${esc(lead.summary)}</p><a class="text-link" href="/article/${lead.slug}">READ THE AFR FEATURE →</a></div></article>
@@ -142,10 +142,52 @@ async function getGlobalFxPageData(env) {
   }
 }
 
+
+const FX_PAIR_PAGES = {
+  NGN:{name:"Nigerian naira",slug:"usd-to-ngn",source:"ExchangeRate-API open endpoint"},
+  GBP:{name:"British pound",slug:"usd-to-gbp",source:"Frankfurter reference data"},
+  EUR:{name:"Euro",slug:"usd-to-eur",source:"Frankfurter reference data"},
+  CAD:{name:"Canadian dollar",slug:"usd-to-cad",source:"Frankfurter reference data"},
+  JPY:{name:"Japanese yen",slug:"usd-to-jpy",source:"Frankfurter reference data"},
+  INR:{name:"Indian rupee",slug:"usd-to-inr",source:"Frankfurter reference data"},
+  ZAR:{name:"South African rand",slug:"usd-to-zar",source:"Frankfurter reference data"},
+  AUD:{name:"Australian dollar",slug:"usd-to-aud",source:"Frankfurter reference data"}
+};
+
+async function currencyPairPage(env, code) {
+  const item = FX_PAIR_PAGES[code];
+  if (!item) return null;
+  let value = null, date = null, source = item.source;
+  if (code === "NGN") {
+    const ngn = await getRates();
+    value = Number(ngn.rates && ngn.rates.USD);
+    date = ngn.updated;
+  } else {
+    const fx = await getGlobalFxPageData(env);
+    value = Number(fx && fx.rates && fx.rates[code]);
+    date = fx && fx.date;
+  }
+  const valid = Number.isFinite(value) && value > 0;
+  const display = valid ? value.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:4}) : "Temporarily unavailable";
+  const links = Object.entries(FX_PAIR_PAGES).filter(([c])=>c!==code).map(([c,v])=>'<a class="text-link" href="/rates/'+v.slug+'">USD to '+c+' →</a>').join(" · ");
+  const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">DAILY CURRENCY REFERENCE</div><h1>USD to ${code} exchange rate</h1><p>How much is one US dollar worth in ${item.name}?</p></div></section>
+  <main class="wrap" style="padding-top:28px;padding-bottom:48px"><section class="rate-panel">
+  <div class="rate-head"><div><div class="eyebrow">UNITED STATES DOLLAR / ${code}</div><h2>1 USD = ${display} ${code}</h2></div><span class="market-tag">REFERENCE RATE</span></div>
+  <p class="market-note">${date ? "Reference date: "+esc(String(date)) : "Latest available reference date"} · Source: ${esc(source)}</p>
+  <p>To estimate a conversion, multiply the amount in US dollars by ${valid ? display : "the published rate"} . For example, US$100 is approximately ${valid ? (value*100).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})+" "+code : "unavailable"}.</p>
+  <p class="rate-note">This is an indicative reference rate, not a guaranteed bank, card-network or currency-dealer rate. Fees and customer exchange rates may differ. Confirm the final amount with your provider before making a transaction.</p>
+  </section><section class="article"><h2>About the USD to ${code} rate</h2><p>The USD to ${code} exchange rate shows how many units of ${item.name} are equivalent to one United States dollar. It is useful as a general reference when comparing currencies, planning international payments or following foreign-exchange markets.</p><p>Reference rates can move and may not update on weekends or public holidays. The displayed date is the source's publication or update date, not a promise of a live dealing price.</p><h2>Explore other currency rates</h2><p>${links}</p><p><a class="text-link" href="/rates">VIEW ALL GLOBAL EXCHANGE RATES →</a></p></section></main>`;
+  const title = "USD to "+code+" Exchange Rate Today | Atlantic Financial Review";
+  const description = "Check the latest available US dollar to "+item.name+" reference exchange rate, publication date and a simple conversion example.";
+  return shell(content,"Currencies",title,description,"/rates/"+item.slug);
+}
+
 async function ratesPage(env) {
   const fx = await getGlobalFxPageData(env);
-  const fxNames = {EUR:"Euro",GBP:"Pound sterling",JPY:"Japanese yen",CHF:"Swiss franc",CNY:"Chinese yuan",CAD:"Canadian dollar",AUD:"Australian dollar",NZD:"New Zealand dollar",SGD:"Singapore dollar",HKD:"Hong Kong dollar",SEK:"Swedish krona",NOK:"Norwegian krone",DKK:"Danish krone",PLN:"Polish zloty",CZK:"Czech koruna",HUF:"Hungarian forint",TRY:"Turkish lira",MXN:"Mexican peso",BRL:"Brazilian real",ZAR:"South African rand",INR:"Indian rupee",KRW:"South Korean won",THB:"Thai baht",IDR:"Indonesian rupiah",PHP:"Philippine peso",MYR:"Malaysian ringgit"};
-  const fxOrder = ["EUR","GBP","JPY","CHF","CNY","CAD","AUD","NZD","SGD","HKD","SEK","NOK","DKK","PLN","CZK","HUF","TRY","MXN","BRL","ZAR","INR","KRW","THB","IDR","PHP","MYR"];
+  const ngnData = await getRates().catch(() => null);
+  if (fx && ngnData && ngnData.rates && Number.isFinite(Number(ngnData.rates.USD))) fx.rates.NGN = Number(ngnData.rates.USD);
+  const fxNames = {NGN:"Nigerian naira",EUR:"Euro",GBP:"Pound sterling",JPY:"Japanese yen",CHF:"Swiss franc",CNY:"Chinese yuan",CAD:"Canadian dollar",AUD:"Australian dollar",NZD:"New Zealand dollar",SGD:"Singapore dollar",HKD:"Hong Kong dollar",SEK:"Swedish krona",NOK:"Norwegian krone",DKK:"Danish krone",PLN:"Polish zloty",CZK:"Czech koruna",HUF:"Hungarian forint",TRY:"Turkish lira",MXN:"Mexican peso",BRL:"Brazilian real",ZAR:"South African rand",INR:"Indian rupee",KRW:"South Korean won",THB:"Thai baht",IDR:"Indonesian rupiah",PHP:"Philippine peso",MYR:"Malaysian ringgit"};
+  const fxOrder = ["NGN","EUR","GBP","JPY","CHF","CNY","CAD","AUD","NZD","SGD","HKD","SEK","NOK","DKK","PLN","CZK","HUF","TRY","MXN","BRL","ZAR","INR","KRW","THB","IDR","PHP","MYR"];
   const fxRows = fx ? fxOrder.filter(code => Number.isFinite(Number(fx.rates && fx.rates[code]))).map(code => {
     const move = fx.changes && fx.changes[code];
     const change = move && Number.isFinite(Number(move.percent)) ? ((move.percent > 0 ? "+" : "") + Number(move.percent).toFixed(2) + "%") : "—";
@@ -153,7 +195,7 @@ async function ratesPage(env) {
     return "<tr><td>" + fxNames[code] + "</td><td>" + code + "</td><td>" + Number(fx.rates[code]).toLocaleString("en-US",{minimumFractionDigits:4,maximumFractionDigits:4}) + "</td><td class=\"" + cls + "\">" + change + "</td></tr>";
   }).join("") : "<tr><td colspan=\"4\">Reference data is temporarily unavailable. No figures have been estimated.</td></tr>";
   const fxState = fx ? "Reference date: " + esc(fx.date) + " · Base currency: USD" + (fx.comparisonDate ? " · Compared with " + esc(fx.comparisonDate) : "") : "Reference data temporarily unavailable";
-  const fxSource = fx ? "Source: " + esc(fx.source || "Frankfurter daily reference data") + ". Figures are shown to four decimal places." : "Source: Frankfurter. The latest published reference data could not be retrieved.";
+  const fxSource = fx ? "Sources: Frankfurter reference data for major currencies; ExchangeRate-API for NGN. Figures are indicative and shown to four decimal places." : "Source: Frankfurter. The latest published reference data could not be retrieved.";
 
   const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">GLOBAL CURRENCY MONITOR</div><h1>Global exchange rates</h1><p>Daily reference rates for major world currencies, with the publication date shown clearly.</p></div></section>
   <main class="wrap" style="padding-top:28px;padding-bottom:50px">
@@ -164,7 +206,7 @@ async function ratesPage(env) {
       <p class="rate-note" id="global-fx-source">${fxSource}</p>
       <p class="rate-note">These are daily reference rates, not live dealing prices or guaranteed bank/customer rates. Values may not update on weekends or public holidays.</p>
     </section>
-    <section class="article"><h2>How to read this monitor</h2><p>The table shows the number of units of each listed currency equivalent to one US dollar. The date is the source publication date, not necessarily today's date. A previous working day's figure may remain visible when markets or central banks are closed.</p><p>For a transaction, confirm the final rate and fees directly with your bank or regulated currency provider.</p><p>Data service: <a class="text-link" href="https://frankfurter.dev/" target="_blank" rel="noopener">Frankfurter</a>. This is an informational reference monitor, not investment or foreign-exchange advice.</p></section>
+    <section class="article"><h2>Popular USD exchange rates</h2><p><a class="text-link" href="/rates/usd-to-ngn">USD to NGN →</a> · <a class="text-link" href="/rates/usd-to-gbp">USD to GBP →</a> · <a class="text-link" href="/rates/usd-to-eur">USD to EUR →</a> · <a class="text-link" href="/rates/usd-to-cad">USD to CAD →</a> · <a class="text-link" href="/rates/usd-to-jpy">USD to JPY →</a> · <a class="text-link" href="/rates/usd-to-inr">USD to INR →</a> · <a class="text-link" href="/rates/usd-to-zar">USD to ZAR →</a> · <a class="text-link" href="/rates/usd-to-aud">USD to AUD →</a></p></section><section class="article"><h2>How to read this monitor</h2><p>The table shows the number of units of each listed currency equivalent to one US dollar. The date is the source publication date, not necessarily today's date. A previous working day's figure may remain visible when markets or central banks are closed.</p><p>For a transaction, confirm the final rate and fees directly with your bank or regulated currency provider.</p><p>Data service: <a class="text-link" href="https://frankfurter.dev/" target="_blank" rel="noopener">Frankfurter</a>. This is an informational reference monitor, not investment or foreign-exchange advice.</p></section>
   </main>
   <style>
   .market-tag{font-size:11px;font-weight:700;letter-spacing:1px;background:#edf2f7;color:#29425f;padding:7px 10px;border-radius:3px}
@@ -444,9 +486,18 @@ export default {
     }
 
     if (path === "/sitemap.xml") {
-      const urls = ["/", "/features", "/markets", "/rates", "/about", ...stories.map(s => "/article/" + s.slug)];
+      const urls = ["/", "/features", "/markets", "/rates", "/about", ...Object.values(FX_PAIR_PAGES).map(v => "/rates/" + v.slug), ...stories.map(s => "/article/" + s.slug)];
       const xml = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map(p => `<url><loc>${SITE.domain}${p}</loc></url>`).join("")}</urlset>`;
       return new Response(xml, { headers: { "content-type": "application/xml; charset=utf-8" } });
+    }
+
+    if (path.startsWith("/rates/")) {
+      const slug = path.slice("/rates/".length);
+      const pair = Object.entries(FX_PAIR_PAGES).find(([,v]) => v.slug === slug);
+      if (pair) {
+        const page = await currencyPairPage(env, pair[0]);
+        return new Response(page, {headers:{"content-type":"text/html; charset=utf-8","Cache-Control":"public, max-age=300","X-Content-Type-Options":"nosniff"}});
+      }
     }
 
     if (path === "/api/global-fx") {

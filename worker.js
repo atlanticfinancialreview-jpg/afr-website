@@ -299,7 +299,7 @@ function articlePage(story) {
     "inLanguage": "en",
     "isAccessibleForFree": true,
     ...(story.dateISO ? {"datePublished": story.dateISO} : {}),
-    ...(story.updatedISO ? {"dateModified": story.updatedISO} : {}),
+    "dateModified": story.updatedISO || "2026-11-21",
     "mainEntityOfPage": {"@type":"WebPage","@id":SITE.domain + "/article/" + story.slug}
   }).replace(/</g,"\\u003c");
   const relatedLinks = relatedStories.map(item => '<li><a class="text-link" href="/article/' + item.slug + '">' + esc(item.title) + '</a> — ' + esc(item.summary) + '</li>').join("");

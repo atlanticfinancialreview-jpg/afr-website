@@ -298,8 +298,8 @@ function articlePage(story) {
     "articleBody": (story.body || []).map(section => section[1]).join(" "),
     "inLanguage": "en",
     "isAccessibleForFree": true,
-    ...(story.dateISO ? {"datePublished": story.dateISO} : {}),
-    "dateModified": story.updatedISO || "2026-11-21",
+    ...((story.dateISO || (story.date === "November 2026" ? "2026-11" : null)) ? {"datePublished": story.dateISO || "2026-11"} : {}),
+    ...(story.updatedISO ? {"dateModified": story.updatedISO} : {}),
     "mainEntityOfPage": {"@type":"WebPage","@id":SITE.domain + "/article/" + story.slug}
   }).replace(/</g,"\\u003c");
   const relatedLinks = relatedStories.map(item => '<li><a class="text-link" href="/article/' + item.slug + '">' + esc(item.title) + '</a> — ' + esc(item.summary) + '</li>').join("");
@@ -308,7 +308,7 @@ function articlePage(story) {
   return shell(content, "Features", story.title + " | Atlantic Financial Review", story.summary, "/article/" + story.slug, "article").replace("</head>", `<meta property="og:image" content="${SITE.domain}/images/${encodeURIComponent(story.image)}">
 <meta name="author" content="AFR Editorial Desk">
 <meta property="article:section" content="${esc(story.category)}">
-${story.dateISO ? `<meta property="article:published_time" content="${story.dateISO}">` : ""}
+${(story.dateISO || (story.date === "November 2026" ? "2026-11" : null)) ? `<meta property="article:published_time" content="${story.dateISO || "2026-11"}">` : ""}
 ${story.updatedISO ? `<meta property="article:modified_time" content="${story.updatedISO}">` : ""}
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">${schema}</script>

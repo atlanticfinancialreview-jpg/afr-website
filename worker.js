@@ -151,7 +151,9 @@ const FX_PAIR_PAGES = {
   JPY:{name:"Japanese yen",slug:"usd-to-jpy",source:"Frankfurter reference data"},
   INR:{name:"Indian rupee",slug:"usd-to-inr",source:"Frankfurter reference data"},
   ZAR:{name:"South African rand",slug:"usd-to-zar",source:"Frankfurter reference data"},
-  AUD:{name:"Australian dollar",slug:"usd-to-aud",source:"Frankfurter reference data"}
+  AUD:{name:"Australian dollar",slug:"usd-to-aud",source:"Frankfurter reference data"},
+  CNY:{name:"Chinese yuan",slug:"usd-to-cny",source:"Frankfurter reference data"},
+  CHF:{name:"Swiss franc",slug:"usd-to-chf",source:"Frankfurter reference data"}
 };
 
 async function currencyPairPage(env, code) {

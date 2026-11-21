@@ -30,6 +30,9 @@ function shell(content, active = "Home", title = SITE.name, description = SITE.d
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:url" content="${SITE.domain}${canonicalPath}">
+<meta name="twitter:card" content="summary">
 <meta name="theme-color" content="#071a36">
 <link rel="canonical" href="${SITE.domain}${canonicalPath}">
 <meta property="og:type" content="website">
@@ -124,14 +127,41 @@ function featuresPage() {
   return shell(content, "Features", "Global Finance Features | Atlantic Financial Review", "Explore 20 global finance and business features from AFR.", "/features");
 }
 
-function ratesPage() {
+async function getGlobalFxPageData(env) {
+  try {
+    if (env.AFR_DATA) {
+      const saved = await env.AFR_DATA.get("globalfx:latest");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed.date && parsed.rates) return parsed;
+      }
+    }
+    return await refreshGlobalFx(env);
+  } catch (error) {
+    return null;
+  }
+}
+
+async function ratesPage(env) {
+  const fx = await getGlobalFxPageData(env);
+  const fxNames = {EUR:"Euro",GBP:"Pound sterling",JPY:"Japanese yen",CHF:"Swiss franc",CNY:"Chinese yuan",CAD:"Canadian dollar",AUD:"Australian dollar",NZD:"New Zealand dollar",SGD:"Singapore dollar",HKD:"Hong Kong dollar",SEK:"Swedish krona",NOK:"Norwegian krone",DKK:"Danish krone",PLN:"Polish zloty",CZK:"Czech koruna",HUF:"Hungarian forint",TRY:"Turkish lira",MXN:"Mexican peso",BRL:"Brazilian real",ZAR:"South African rand",INR:"Indian rupee",KRW:"South Korean won",THB:"Thai baht",IDR:"Indonesian rupiah",PHP:"Philippine peso",MYR:"Malaysian ringgit"};
+  const fxOrder = ["EUR","GBP","JPY","CHF","CNY","CAD","AUD","NZD","SGD","HKD","SEK","NOK","DKK","PLN","CZK","HUF","TRY","MXN","BRL","ZAR","INR","KRW","THB","IDR","PHP","MYR"];
+  const fxRows = fx ? fxOrder.filter(code => Number.isFinite(Number(fx.rates && fx.rates[code]))).map(code => {
+    const move = fx.changes && fx.changes[code];
+    const change = move && Number.isFinite(Number(move.percent)) ? ((move.percent > 0 ? "+" : "") + Number(move.percent).toFixed(2) + "%") : "—";
+    const cls = move && move.percent > 0 ? "up" : move && move.percent < 0 ? "down" : "flat";
+    return "<tr><td>" + fxNames[code] + "</td><td>" + code + "</td><td>" + Number(fx.rates[code]).toLocaleString("en-US",{minimumFractionDigits:4,maximumFractionDigits:4}) + "</td><td class=\"" + cls + "\">" + change + "</td></tr>";
+  }).join("") : "<tr><td colspan=\"4\">Reference data is temporarily unavailable. No figures have been estimated.</td></tr>";
+  const fxState = fx ? "Reference date: " + esc(fx.date) + " · Base currency: USD" + (fx.comparisonDate ? " · Compared with " + esc(fx.comparisonDate) : "") : "Reference data temporarily unavailable";
+  const fxSource = fx ? "Source: " + esc(fx.source || "Frankfurter daily reference data") + ". Figures are shown to four decimal places." : "Source: Frankfurter. The latest published reference data could not be retrieved.";
+
   const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">GLOBAL CURRENCY MONITOR</div><h1>Global exchange rates</h1><p>Daily reference rates for major world currencies, with the publication date shown clearly.</p></div></section>
   <main class="wrap" style="padding-top:28px;padding-bottom:50px">
     <section class="rate-panel" style="margin-bottom:22px">
       <div class="rate-head"><div><div class="eyebrow">FOREIGN EXCHANGE</div><h2>How much is US$1 worth?</h2></div><span class="market-tag">DAILY REFERENCE</span></div>
-      <div id="global-fx-state" class="market-note">Loading the latest published reference rates…</div>
-      <div class="fx-table-wrap"><table class="fx-table"><thead><tr><th>Currency</th><th>Code</th><th>Value for US$1</th><th>Daily change</th></tr></thead><tbody id="global-fx-rows"><tr><td colspan="4">Retrieving data…</td></tr></tbody></table></div>
-      <p class="rate-note" id="global-fx-source">Source: Frankfurter, based on central-bank reference data.</p>
+      <div id="global-fx-state" class="market-note">${fxState}</div>
+      <div class="fx-table-wrap"><table class="fx-table"><thead><tr><th>Currency</th><th>Code</th><th>Value for US$1</th><th>Daily change</th></tr></thead><tbody id="global-fx-rows">${fxRows}</tbody></table></div>
+      <p class="rate-note" id="global-fx-source">${fxSource}</p>
       <p class="rate-note">These are daily reference rates, not live dealing prices or guaranteed bank/customer rates. Values may not update on weekends or public holidays.</p>
     </section>
     <section class="article"><h2>How to read this monitor</h2><p>The table shows the number of units of each listed currency equivalent to one US dollar. The date is the source publication date, not necessarily today's date. A previous working day's figure may remain visible when markets or central banks are closed.</p><p>For a transaction, confirm the final rate and fees directly with your bank or regulated currency provider.</p><p>Data service: <a class="text-link" href="https://frankfurter.dev/" target="_blank" rel="noopener">Frankfurter</a>. This is an informational reference monitor, not investment or foreign-exchange advice.</p></section>
@@ -174,15 +204,22 @@ function ratesPage() {
   </script>`;
   return shell(content, "Currencies", "Global Exchange Rates | Atlantic Financial Review", "Daily reference exchange rates for major global currencies.", "/rates");
 }
-function marketsPage() {
+async function marketsPage(env) {
+  const fx = await getGlobalFxPageData(env);
+  const marketFxNames = {EUR:"EURO",GBP:"POUND STERLING",JPY:"JAPANESE YEN",CHF:"SWISS FRANC",CNY:"CHINESE YUAN",CAD:"CANADIAN DOLLAR",AUD:"AUSTRALIAN DOLLAR",SGD:"SINGAPORE DOLLAR"};
+  const marketFxCodes = ["EUR","GBP","JPY","CAD","CHF","CNY","AUD","SGD"];
+  const marketFxCards = fx ? marketFxCodes.filter(code => Number.isFinite(Number(fx.rates && fx.rates[code]))).map(code => "<div class=\"dash-fx-card\"><small>" + code + " · " + marketFxNames[code] + "</small><strong>" + Number(fx.rates[code]).toLocaleString("en-US",{minimumFractionDigits:4,maximumFractionDigits:4}) + "</strong><span>Units per US$1</span></div>").join("") : "<div class=\"dash-fx-card\" style=\"grid-column:1/-1\"><strong>Reference data temporarily unavailable</strong><span>No figures have been estimated.</span></div>";
+  const marketFxState = fx ? "Source date: " + esc(fx.date) + " · Base currency: USD" : "Currency reference data temporarily unavailable.";
+  const marketFxSource = fx ? "Source: " + esc(fx.source || "Frankfurter daily reference data") + ". Daily reference rates; not transaction prices." : "Source: Frankfurter. No figures are estimated when the feed is unavailable.";
+
   const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">AFR GLOBAL MARKETS BOARD</div><h1>Global markets, at a glance</h1><p>A colourful, clear view of major currencies and the world's financial markets.</p></div></section>
   <main class="wrap afr-markets" style="padding-top:26px;padding-bottom:50px">
     <section class="dash-intro"><div><span class="dash-kicker">THE AFR MARKET PULSE</span><h2>World markets in one view</h2><p>Daily currency reference data, with market coverage clearly distinguished from live prices.</p></div><div class="dash-live"><i></i> CURRENCY DATA CONNECTED</div></section>
     <section class="dash-section">
       <div class="dash-section-head"><div><span class="dash-kicker">01 / FOREIGN EXCHANGE</span><h2>Global currency monitor</h2><p>How much each currency is worth against US$1</p></div><a href="/rates" class="dash-link">FULL CURRENCY TABLE →</a></div>
-      <div id="afr-dash-fx-state" class="dash-state">Fetching latest published reference rates…</div>
-      <div id="afr-dash-fx" class="dash-fx-grid"><div class="dash-fx-card"><small>EUR · EURO</small><strong>Loading…</strong><span>Per US$1</span></div><div class="dash-fx-card"><small>GBP · POUND</small><strong>Loading…</strong><span>Per US$1</span></div><div class="dash-fx-card"><small>JPY · YEN</small><strong>Loading…</strong><span>Per US$1</span></div><div class="dash-fx-card"><small>CAD · CANADIAN DOLLAR</small><strong>Loading…</strong><span>Per US$1</span></div><div class="dash-fx-card"><small>CHF · SWISS FRANC</small><strong>Loading…</strong><span>Per US$1</span></div><div class="dash-fx-card"><small>CNY · CHINESE YUAN</small><strong>Loading…</strong><span>Per US$1</span></div><div class="dash-fx-card"><small>AUD · AUSTRALIAN DOLLAR</small><strong>Loading…</strong><span>Per US$1</span></div><div class="dash-fx-card"><small>SGD · SINGAPORE DOLLAR</small><strong>Loading…</strong><span>Per US$1</span></div></div>
-      <p class="dash-foot" id="afr-dash-fx-source">Source: Frankfurter daily reference data. Not transaction rates.</p>
+      <div id="afr-dash-fx-state" class="dash-state">${marketFxState}</div>
+      <div id="afr-dash-fx" class="dash-fx-grid">${marketFxCards}</div>
+      <p class="dash-foot" id="afr-dash-fx-source">${marketFxSource}</p>
     </section>
     <section class="dash-section">
       <div class="dash-section-head"><div><span class="dash-kicker">02 / EQUITY MARKETS</span><h2>Regional market watch</h2><p>Key indices AFR follows around the world</p></div></div>
@@ -246,9 +283,28 @@ function marketsPage() {
   return shell(content, "Markets", "Global Markets Board | Atlantic Financial Review", "A colourful global markets dashboard with daily currency reference rates.", "/markets");
 }
 function articlePage(story) {
+  const storyIndex = stories.findIndex(item => item.slug === story.slug);
+  const relatedStories = [1,2,3].map(offset => stories[(storyIndex + offset) % stories.length]);
+  const schema = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": story.title,
+    "description": story.summary,
+    "image": SITE.domain + "/images/" + story.image,
+    "author": {"@type":"Organization","name":"AFR Editorial Desk"},
+    "publisher": {"@type":"Organization","name":SITE.name,"url":SITE.domain},
+    "articleSection": story.category,
+    "mainEntityOfPage": {"@type":"WebPage","@id":SITE.domain + "/article/" + story.slug}
+  }).replace(/</g,"\\u003c");
+  const relatedLinks = relatedStories.map(item => '<li><a class="text-link" href="/article/' + item.slug + '">' + esc(item.title) + '</a> — ' + esc(item.summary) + '</li>').join("");
   const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">AFR KNOWLEDGE DESK</div><p>Independent explainers for informed financial decisions.</p></div></section>
-  <main class="wrap"><article class="article"><div class="tag">${story.category}</div><h1>${esc(story.title)}</h1><p class="intro">${esc(story.summary)}</p><div class="article-meta">AFR Editorial Desk · ${story.date} · ${story.read}</div>${imageTag(story.image,story.title,"article-hero-image")}${story.body.map(([h,p])=>`<h2>${esc(h)}</h2><p>${esc(p)}</p>`).join("")}${story.sources?.length ? `<div class="notice"><h2>Sources and further reading</h2><ul>${story.sources.map(source=>`<li><a class="text-link" href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">${esc(source.title)}</a></li>`).join("")}</ul></div>` : ""}<div class="notice">This article is general information, not individual financial, legal or tax advice. Check current rules and consult a qualified professional where necessary.</div><p style="margin-top:25px"><a class="text-link" href="/features">← BACK TO ALL FEATURES</a></p></article></main>`;
-  return shell(content, "Features", story.title + " | Atlantic Financial Review", story.summary, "/article/" + story.slug).replace("</head>", `<meta property="og:image" content="${SITE.domain}/images/${encodeURIComponent(story.image)}">\n</head>`);
+  <main class="wrap"><article class="article"><div class="tag">${esc(story.category)}</div><h1>${esc(story.title)}</h1><p class="intro">${esc(story.summary)}</p><div class="article-meta">Published: ${esc(story.date)} · By AFR Editorial Desk · ${esc(story.read)}</div>${imageTag(story.image,story.title,"article-hero-image")}${story.body.map(([h,p])=>`<h2>${esc(h)}</h2><p>${esc(p)}</p>`).join("")}${story.sources?.length ? `<div class="notice"><h2>Sources and further reading</h2><ul>${story.sources.map(source=>`<li><a class="text-link" href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">${esc(source.title)}</a></li>`).join("")}</ul></div>` : ""}<div class="notice"><h2>Editorial note</h2>This article is general information, not individual financial, legal or tax advice. Check current rules and consult a qualified professional where necessary.</div><div class="notice"><h2>Continue reading</h2><ul>${relatedLinks}</ul></div><p style="margin-top:25px"><a class="text-link" href="/features">← BACK TO ALL FEATURES</a></p></article></main>`;
+  return shell(content, "Features", story.title + " | Atlantic Financial Review", story.summary, "/article/" + story.slug).replace("</head>", `<meta property="og:type" content="article">
+<meta property="og:image" content="${SITE.domain}/images/${encodeURIComponent(story.image)}">
+<meta name="author" content="AFR Editorial Desk">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">${schema}</script>
+</head>`);
 }
 
 function aboutPage() {
@@ -372,6 +428,13 @@ export default {
       });
     }
 
+    if (path === "/article/send-money-to-nigeria") {
+      return new Response("<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"robots\" content=\"noindex,follow\"><title>Page withdrawn | Atlantic Financial Review</title></head><body><main><h1>This article has been withdrawn</h1><p>This page is no longer part of AFR's current global editorial coverage.</p><p><a href=\"/features\">Explore current AFR features</a></p></main></body></html>", {
+        status: 410,
+        headers: {"content-type":"text/html; charset=utf-8","X-Robots-Tag":"noindex, follow","Cache-Control":"public, max-age=3600"}
+      });
+    }
+
     if (path === "/sitemap.xml") {
       const urls = ["/", "/features", "/markets", "/rates", "/about", ...stories.map(s => "/article/" + s.slug)];
       const xml = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map(p => `<url><loc>${SITE.domain}${p}</loc></url>`).join("")}</urlset>`;
@@ -413,22 +476,27 @@ export default {
     }
 
     let html;
+    let responseStatus = 200;
     if (path === "/") html = homePage();
     else if (path === "/features") html = featuresPage();
-    else if (path === "/rates") html = ratesPage();
-    else if (path === "/markets") html = marketsPage();
+    else if (path === "/rates") html = await ratesPage(env);
+    else if (path === "/markets") html = await marketsPage(env);
     else if (path === "/about") html = aboutPage();
     else if (path.startsWith("/article/")) {
       const slug = path.slice("/article/".length);
       const story = stories.find(s => s.slug === slug);
-      html = story ? articlePage(story) : shell(`<main class="wrap"><div class="article"><h1>Article not found</h1><p>The page may have moved.</p><a class="text-link" href="/">RETURN HOME →</a></div></main>`);
+      html = story ? articlePage(story) : shell(`<main class="wrap"><div class="article"><h1>Article not found</h1><p>The page may have moved.</p><a class="text-link" href="/features">EXPLORE CURRENT FEATURES →</a></div></main>`);
+      if (!story) responseStatus = 404;
     } else {
       html = shell(`<main class="wrap"><div class="article"><h1>Page not found</h1><p>The page you requested could not be found.</p><a class="text-link" href="/">RETURN HOME →</a></div></main>`);
+      responseStatus = 404;
     }
 
     return new Response(html, {
+      status: responseStatus,
       headers: {
         "content-type": "text/html; charset=utf-8",
+        ...(responseStatus !== 200 ? {"X-Robots-Tag":"noindex, follow"} : {}),
         "Cache-Control": "public, max-age=300",
         "X-Content-Type-Options": "nosniff",
         "Referrer-Policy": "strict-origin-when-cross-origin"

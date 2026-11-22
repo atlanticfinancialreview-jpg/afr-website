@@ -156,6 +156,18 @@ const FX_PAIR_PAGES = {
   CHF:{name:"Swiss franc",slug:"usd-to-chf",source:"Frankfurter reference data"}
 };
 
+const DIASPORA_CORRIDORS = [
+  {from:"GBP",to:"NGN",fromName:"British pound",toName:"Nigerian naira",sender:"UK",country:"Nigeria",slug:"gbp-to-ngn"},
+  {from:"GBP",to:"GHS",fromName:"British pound",toName:"Ghanaian cedi",sender:"UK",country:"Ghana",slug:"gbp-to-ghs"},
+  {from:"GBP",to:"KES",fromName:"British pound",toName:"Kenyan shilling",sender:"UK",country:"Kenya",slug:"gbp-to-kes"},
+  {from:"USD",to:"NGN",fromName:"US dollar",toName:"Nigerian naira",sender:"USA",country:"Nigeria",slug:"usd-to-ngn-diaspora"},
+  {from:"USD",to:"GHS",fromName:"US dollar",toName:"Ghanaian cedi",sender:"USA",country:"Ghana",slug:"usd-to-ghs"},
+  {from:"USD",to:"KES",fromName:"US dollar",toName:"Kenyan shilling",sender:"USA",country:"Kenya",slug:"usd-to-kes"},
+  {from:"CAD",to:"NGN",fromName:"Canadian dollar",toName:"Nigerian naira",sender:"Canada",country:"Nigeria",slug:"cad-to-ngn"},
+  {from:"CAD",to:"GHS",fromName:"Canadian dollar",toName:"Ghanaian cedi",sender:"Canada",country:"Ghana",slug:"cad-to-ghs"},
+  {from:"CAD",to:"KES",fromName:"Canadian dollar",toName:"Kenyan shilling",sender:"Canada",country:"Kenya",slug:"cad-to-kes"}
+];
+
 async function currencyPairPage(env, code) {
   const item = FX_PAIR_PAGES[code];
   if (!item) return null;
@@ -185,11 +197,44 @@ async function currencyPairPage(env, code) {
 }
 
 async function ratesPage(env) {
+
+async function diasporaRatePage(env, corridor) {
+  const fx = await getGlobalFxPageData(env);
+  const ngnData = corridor.to === "NGN" ? await getRates().catch(() => null) : null;
+  const fromRate = corridor.from === "USD" ? 1 : Number(fx && fx.rates && fx.rates[corridor.from]);
+  const toRate = corridor.to === "NGN"
+    ? Number(ngnData && ngnData.rates && ngnData.rates.USD)
+    : Number(fx && fx.rates && fx.rates[corridor.to]);
+  const valid = Number.isFinite(fromRate) && fromRate > 0 && Number.isFinite(toRate) && toRate > 0;
+  const value = valid ? toRate / fromRate : NaN;
+  const display = valid ? value.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:4}) : "Temporarily unavailable";
+  const amount = valid ? (100 * value).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) : "unavailable";
+  const referenceDate = corridor.to === "NGN" ? (ngnData && ngnData.updated) : (fx && fx.date);
+  const source = corridor.to === "NGN" ? "ExchangeRate-API open endpoint for NGN; Frankfurter reference data for the sending currency" : "Frankfurter · central-bank reference data";
+  const links = DIASPORA_CORRIDORS.filter(c=>c.slug!==corridor.slug).map(c=>'<a class="text-link" href="/rates/'+c.slug+'">'+c.from+' to '+c.to+' ('+c.sender+' to '+c.country+')</a>').join(" · ");
+  const content = '<section class="page-title"><div class="wrap"><div class="eyebrow">AFR DIASPORA CURRENCY GUIDE</div><h1>'+corridor.sender+' to '+corridor.country+' exchange rate</h1><p>Indicative conversion from '+corridor.fromName+' ('+corridor.from+') to '+corridor.toName+' ('+corridor.to+').</p></div></section>'+
+  '<main class="wrap" style="padding-top:28px;padding-bottom:48px"><section class="rate-panel"><div class="rate-head"><div><div class="eyebrow">CROSS-BORDER CURRENCY REFERENCE</div><h2>1 '+corridor.from+' = '+display+' '+corridor.to+'</h2></div><span class="market-tag">REFERENCE RATE</span></div>'+
+  '<p class="market-note">Reference date: '+esc(String(referenceDate || "Latest available"))+' · Source: '+esc(source)+'</p>'+
+  '<p>At this indicative reference rate, 100 '+corridor.from+' is approximately '+amount+' '+corridor.to+'. This calculation is a currency reference only; it is not a quote from a money-transfer company.</p>'+
+  '<p class="rate-note">The displayed rate excludes provider fees, exchange-rate margins, card or bank charges and payout costs. The actual amount a recipient receives may be lower or different. Check the provider quote immediately before sending.</p></section>'+
+  '<section class="article"><h2>How to compare a transfer on this corridor</h2><p>Enter the same sending amount, payment method and payout method into each regulated provider\'s official calculator. Compare the total amount debited and the final amount the recipient receives—not just the advertised fee or headline rate. Promotional rates and limits may apply.</p><p>Reference rates are useful for context, but they are not executable remittance prices. Rates may be delayed or unavailable on weekends and public holidays. Always confirm the provider\'s final quote.</p><h2>Explore other AFR diaspora currency corridors</h2><p>'+links+'</p><p><a class="text-link" href="/diaspora-rates">VIEW ALL DIASPORA RATES →</a> · <a class="text-link" href="/rates">GLOBAL CURRENCY MONITOR →</a></p></section></main>';
+  const title = corridor.sender+' to '+corridor.country+' Exchange Rate Today | AFR';
+  const description = 'Indicative '+corridor.from+' to '+corridor.to+' reference exchange rate for '+corridor.sender+' to '+corridor.country+'. See the reference date, conversion example and remittance comparison guidance.';
+  return shell(content,"Currencies",title,description,"/rates/"+corridor.slug);
+}
+
+function diasporaRatesPage() {
+  const cards = DIASPORA_CORRIDORS.map(c=>'<a class="feature" href="/rates/'+c.slug+'"><span class="tag">'+c.sender+' TO '+c.country.toUpperCase()+'</span><h3>'+c.from+' to '+c.to+'</h3><p>Indicative '+c.fromName+' to '+c.toName+' reference conversion and practical transfer comparison guidance.</p><span class="text-link">VIEW CORRIDOR RATE →</span></a>').join("");
+  const content = '<section class="page-title"><div class="wrap"><div class="eyebrow">AFR DIASPORA FINANCE</div><h1>Exchange rates from the UK, USA and Canada to Africa</h1><p>Indicative currency references for transfers from three major diaspora markets to Nigeria, Ghana and Kenya.</p></div></section><main class="wrap" style="padding-top:28px;padding-bottom:50px"><section class="article"><h2>Choose a sending corridor</h2><p>Use these reference rates to understand currency conversion. They are not money-transfer provider quotes and do not include fees or exchange-rate margins.</p><div class="cards">'+cards+'</div><p class="rate-note">For a real transfer, compare the final recipient payout using the same amount, payment method and payout method on each provider\'s official calculator. Each corridor page identifies its data source and reference date.</p><p><a class="text-link" href="/rates">VIEW GLOBAL CURRENCY MONITOR →</a></p></section></main>';
+  return shell(content,"Currencies","Diaspora Exchange Rates: UK, USA and Canada to Africa | AFR","Indicative exchange-rate references for sending money from the UK, USA and Canada to Nigeria, Ghana and Kenya.","/diaspora-rates");
+}
+
+
   const fx = await getGlobalFxPageData(env);
   const ngnData = await getRates().catch(() => null);
   if (fx && ngnData && ngnData.rates && Number.isFinite(Number(ngnData.rates.USD))) fx.rates.NGN = Number(ngnData.rates.USD);
-  const fxNames = {NGN:"Nigerian naira",EUR:"Euro",GBP:"Pound sterling",JPY:"Japanese yen",CHF:"Swiss franc",CNY:"Chinese yuan",CAD:"Canadian dollar",AUD:"Australian dollar",NZD:"New Zealand dollar",SGD:"Singapore dollar",HKD:"Hong Kong dollar",SEK:"Swedish krona",NOK:"Norwegian krone",DKK:"Danish krone",PLN:"Polish zloty",CZK:"Czech koruna",HUF:"Hungarian forint",TRY:"Turkish lira",MXN:"Mexican peso",BRL:"Brazilian real",ZAR:"South African rand",INR:"Indian rupee",KRW:"South Korean won",THB:"Thai baht",IDR:"Indonesian rupiah",PHP:"Philippine peso",MYR:"Malaysian ringgit"};
-  const fxOrder = ["NGN","EUR","GBP","JPY","CHF","CNY","CAD","AUD","NZD","SGD","HKD","SEK","NOK","DKK","PLN","CZK","HUF","TRY","MXN","BRL","ZAR","INR","KRW","THB","IDR","PHP","MYR"];
+  const fxNames = {NGN:"Nigerian naira",GHS:"Ghanaian cedi",KES:"Kenyan shilling",EUR:"Euro",GBP:"Pound sterling",JPY:"Japanese yen",CHF:"Swiss franc",CNY:"Chinese yuan",CAD:"Canadian dollar",AUD:"Australian dollar",NZD:"New Zealand dollar",SGD:"Singapore dollar",HKD:"Hong Kong dollar",SEK:"Swedish krona",NOK:"Norwegian krone",DKK:"Danish krone",PLN:"Polish zloty",CZK:"Czech koruna",HUF:"Hungarian forint",TRY:"Turkish lira",MXN:"Mexican peso",BRL:"Brazilian real",ZAR:"South African rand",INR:"Indian rupee",KRW:"South Korean won",THB:"Thai baht",IDR:"Indonesian rupiah",PHP:"Philippine peso",MYR:"Malaysian ringgit"};
+  const fxOrder = ["NGN","GHS","KES","EUR","GBP","JPY","CHF","CNY","CAD","AUD","NZD","SGD","HKD","SEK","NOK","DKK","PLN","CZK","HUF","TRY","MXN","BRL","ZAR","INR","KRW","THB","IDR","PHP","MYR"];
   const fxRows = fx ? fxOrder.filter(code => Number.isFinite(Number(fx.rates && fx.rates[code]))).map(code => {
     const move = fx.changes && fx.changes[code];
     const change = move && Number.isFinite(Number(move.percent)) ? ((move.percent > 0 ? "+" : "") + Number(move.percent).toFixed(2) + "%") : "—";
@@ -197,7 +242,7 @@ async function ratesPage(env) {
     return "<tr><td>" + fxNames[code] + "</td><td>" + code + "</td><td>" + Number(fx.rates[code]).toLocaleString("en-US",{minimumFractionDigits:4,maximumFractionDigits:4}) + "</td><td class=\"" + cls + "\">" + change + "</td></tr>";
   }).join("") : "<tr><td colspan=\"4\">Reference data is temporarily unavailable. No figures have been estimated.</td></tr>";
   const fxState = fx ? "Reference date: " + esc(fx.date) + " · Base currency: USD" + (fx.comparisonDate ? " · Compared with " + esc(fx.comparisonDate) : "") : "Reference data temporarily unavailable";
-  const fxSource = fx ? "Sources: Frankfurter reference data for major currencies; ExchangeRate-API for NGN. Figures are indicative and shown to four decimal places." : "Source: Frankfurter. The latest published reference data could not be retrieved.";
+  const fxSource = fx ? "Sources: Frankfurter reference data for major currencies including GHS and KES; ExchangeRate-API for NGN. Figures are indicative and shown to four decimal places." : "Source: Frankfurter. The latest published reference data could not be retrieved.";
 
   const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">GLOBAL CURRENCY MONITOR</div><h1>Global exchange rates</h1><p>Daily reference rates for major world currencies, with the publication date shown clearly.</p></div></section>
   <main class="wrap" style="padding-top:28px;padding-bottom:50px">
@@ -219,7 +264,7 @@ async function ratesPage(env) {
       <p class="rate-note" id="global-fx-source">${fxSource}</p>
       <p class="rate-note">These are daily reference rates, not live dealing prices or guaranteed bank/customer rates. Values may not update on weekends or public holidays.</p>
     </section>
-    <section class="article"><h2>Popular USD exchange rates</h2><p><a class="text-link" href="/rates/usd-to-ngn">USD to NGN →</a> · <a class="text-link" href="/rates/usd-to-gbp">USD to GBP →</a> · <a class="text-link" href="/rates/usd-to-eur">USD to EUR →</a> · <a class="text-link" href="/rates/usd-to-cad">USD to CAD →</a> · <a class="text-link" href="/rates/usd-to-jpy">USD to JPY →</a> · <a class="text-link" href="/rates/usd-to-inr">USD to INR →</a> · <a class="text-link" href="/rates/usd-to-zar">USD to ZAR →</a> · <a class="text-link" href="/rates/usd-to-aud">USD to AUD →</a></p></section><section class="article"><h2>How to read this monitor</h2><p>The table shows the number of units of each listed currency equivalent to one US dollar. The date is the source publication date, not necessarily today's date. A previous working day's figure may remain visible when markets or central banks are closed.</p><p>For a transaction, confirm the final rate and fees directly with your bank or regulated currency provider.</p><p>Data service: <a class="text-link" href="https://frankfurter.dev/" target="_blank" rel="noopener">Frankfurter</a>. This is an informational reference monitor, not investment or foreign-exchange advice.</p></section>
+    <section class="article"><h2>Popular USD exchange rates</h2><p><a class="text-link" href="/rates/usd-to-ngn">USD to NGN →</a> · <a class="text-link" href="/rates/usd-to-gbp">USD to GBP →</a> · <a class="text-link" href="/rates/usd-to-eur">USD to EUR →</a> · <a class="text-link" href="/rates/usd-to-cad">USD to CAD →</a> · <a class="text-link" href="/rates/usd-to-jpy">USD to JPY →</a> · <a class="text-link" href="/rates/usd-to-inr">USD to INR →</a> · <a class="text-link" href="/rates/usd-to-zar">USD to ZAR →</a> · <a class="text-link" href="/rates/usd-to-aud">USD to AUD →</a></p></section><section class="article"><h2>African diaspora exchange rates</h2><p>Reference conversions for money sent from the UK, USA and Canada to Nigeria, Ghana and Kenya. <a class="text-link" href="/diaspora-rates">EXPLORE ALL NINE DIASPORA CORRIDORS →</a></p><p>${DIASPORA_CORRIDORS.map(c=>`<a class="text-link" href="/rates/${c.slug}">${c.from} to ${c.to} (${c.sender} to ${c.country})</a>`).join(" · ")}</p></section><section class="article"><h2>How to read this monitor</h2><p>The table shows the number of units of each listed currency equivalent to one US dollar. The date is the source publication date, not necessarily today's date. A previous working day's figure may remain visible when markets or central banks are closed.</p><p>For a transaction, confirm the final rate and fees directly with your bank or regulated currency provider.</p><p>Data service: <a class="text-link" href="https://frankfurter.dev/" target="_blank" rel="noopener">Frankfurter</a>. This is an informational reference monitor, not investment or foreign-exchange advice.</p></section>
   </main>
   <style>
   .fx-converter{background:#fff;border:1px solid #e5eaf0;border-radius:10px;padding:22px;margin:0 0 22px}
@@ -248,7 +293,7 @@ async function ratesPage(env) {
     const converterTo=document.getElementById("fx-to");
     const converterResult=document.getElementById("fx-result");
     const converterDate=document.getElementById("fx-converter-date");
-    const currencyNames={USD:"US dollar",NGN:"Nigerian naira",EUR:"Euro",GBP:"Pound sterling",JPY:"Japanese yen",CHF:"Swiss franc",CNY:"Chinese yuan",CAD:"Canadian dollar",AUD:"Australian dollar",NZD:"New Zealand dollar",SGD:"Singapore dollar",HKD:"Hong Kong dollar",SEK:"Swedish krona",NOK:"Norwegian krone",DKK:"Danish krone",PLN:"Polish zloty",CZK:"Czech koruna",HUF:"Hungarian forint",TRY:"Turkish lira",MXN:"Mexican peso",BRL:"Brazilian real",ZAR:"South African rand",INR:"Indian rupee",KRW:"South Korean won",THB:"Thai baht",IDR:"Indonesian rupiah",PHP:"Philippine peso",MYR:"Malaysian ringgit"};
+    const currencyNames={USD:"US dollar",NGN:"Nigerian naira",GHS:"Ghanaian cedi",KES:"Kenyan shilling",EUR:"Euro",GBP:"Pound sterling",JPY:"Japanese yen",CHF:"Swiss franc",CNY:"Chinese yuan",CAD:"Canadian dollar",AUD:"Australian dollar",NZD:"New Zealand dollar",SGD:"Singapore dollar",HKD:"Hong Kong dollar",SEK:"Swedish krona",NOK:"Norwegian krone",DKK:"Danish krone",PLN:"Polish zloty",CZK:"Czech koruna",HUF:"Hungarian forint",TRY:"Turkish lira",MXN:"Mexican peso",BRL:"Brazilian real",ZAR:"South African rand",INR:"Indian rupee",KRW:"South Korean won",THB:"Thai baht",IDR:"Indonesian rupiah",PHP:"Philippine peso",MYR:"Malaysian ringgit"};
     let converterRates=null;
     const formatMoney=(n)=>Number(n).toLocaleString(undefined,{maximumFractionDigits:4});
     function updateConverter(){
@@ -261,7 +306,7 @@ async function ratesPage(env) {
       converterResult.textContent=formatMoney(amount/a*b)+" "+to;
     }
     if(converterFrom&&converterTo){
-      const codes=["USD","NGN","EUR","GBP","JPY","CHF","CNY","CAD","AUD","NZD","SGD","HKD","SEK","NOK","DKK","PLN","CZK","HUF","TRY","MXN","BRL","ZAR","INR","KRW","THB","IDR","PHP","MYR"];
+      const codes=["USD","NGN","GHS","KES","EUR","GBP","JPY","CHF","CNY","CAD","AUD","NZD","SGD","HKD","SEK","NOK","DKK","PLN","CZK","HUF","TRY","MXN","BRL","ZAR","INR","KRW","THB","IDR","PHP","MYR"];
       const options=codes.map(code=>"<option value='"+code+"'>"+code+" · "+currencyNames[code]+"</option>").join("");
       converterFrom.innerHTML=options;converterTo.innerHTML=options;
       converterFrom.value="USD";converterTo.value="NGN";
@@ -440,7 +485,7 @@ async function getRates() {
 
 
 async function refreshGlobalFx(env) {
-  const upstream = await fetch("https://api.frankfurter.dev/v2/rates?base=USD&quotes=EUR,GBP,JPY,CHF,CNY,CAD,AUD,NZD,SGD,HKD,SEK,NOK,DKK,PLN,CZK,HUF,TRY,MXN,BRL,ZAR,INR,KRW,THB,IDR,PHP,MYR", {
+  const upstream = await fetch("https://api.frankfurter.dev/v2/rates?base=USD&quotes=EUR,GBP,JPY,CHF,CNY,CAD,AUD,NZD,SGD,HKD,SEK,NOK,DKK,PLN,CZK,HUF,TRY,MXN,BRL,ZAR,INR,KRW,THB,IDR,PHP,MYR,GHS,KES", {
     headers: { "Accept": "application/json" },
     cf: { cacheTtl: 3600, cacheEverything: true }
   });
@@ -537,7 +582,7 @@ export default {
     }
 
     if (path === "/sitemap.xml") {
-      const urls = ["/", "/features", "/markets", "/rates", "/about", ...Object.values(FX_PAIR_PAGES).map(v => "/rates/" + v.slug), ...stories.map(s => "/article/" + s.slug)];
+      const urls = ["/", "/features", "/markets", "/rates", "/diaspora-rates", "/about", ...Object.values(FX_PAIR_PAGES).map(v => "/rates/" + v.slug), ...DIASPORA_CORRIDORS.map(v => "/rates/" + v.slug), ...stories.map(s => "/article/" + s.slug)];
       const xml = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map(p => `<url><loc>${SITE.domain}${p}</loc></url>`).join("")}</urlset>`;
       return new Response(xml, { headers: { "content-type": "application/xml; charset=utf-8" } });
     }
@@ -547,6 +592,11 @@ export default {
       const pair = Object.entries(FX_PAIR_PAGES).find(([,v]) => v.slug === slug);
       if (pair) {
         const page = await currencyPairPage(env, pair[0]);
+        return new Response(page, {headers:{"content-type":"text/html; charset=utf-8","Cache-Control":"public, max-age=300","X-Content-Type-Options":"nosniff"}});
+      }
+      const corridor = DIASPORA_CORRIDORS.find(v => v.slug === slug);
+      if (corridor) {
+        const page = await diasporaRatePage(env, corridor);
         return new Response(page, {headers:{"content-type":"text/html; charset=utf-8","Cache-Control":"public, max-age=300","X-Content-Type-Options":"nosniff"}});
       }
     }
@@ -590,6 +640,7 @@ export default {
     if (path === "/") html = homePage();
     else if (path === "/features") html = featuresPage();
     else if (path === "/rates") html = await ratesPage(env);
+    else if (path === "/diaspora-rates") html = diasporaRatesPage();
     else if (path === "/markets") html = await marketsPage(env);
     else if (path === "/about") html = aboutPage();
     else if (path.startsWith("/article/")) {

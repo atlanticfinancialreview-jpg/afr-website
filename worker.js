@@ -197,30 +197,29 @@ async function currencyPairPage(env, code) {
 }
 
 async function diasporaRatePage(env, corridor) {
-  const fx = await getGlobalFxPageData(env);
-  const ngnData = corridor.to === "NGN" ? await getRates().catch(() => null) : null;
-  const fromRate = corridor.from === "USD" ? 1 : Number(fx && fx.rates && fx.rates[corridor.from]);
-  const toRate = corridor.to === "NGN"
-    ? Number(ngnData && ngnData.rates && ngnData.rates.USD)
-    : Number(fx && fx.rates && fx.rates[corridor.to]);
+  // Use the same ExchangeRate-API snapshot for the sender and recipient
+  // currencies. This avoids relying on Frankfurter for GHS/KES, which are
+  // not consistently available from that central-bank reference feed.
+  const data = await getRates().catch(() => null);
+  const fromRate = Number(data && data.rates && data.rates[corridor.from]);
+  const toRate = Number(data && data.rates && data.rates[corridor.to]);
   const valid = Number.isFinite(fromRate) && fromRate > 0 && Number.isFinite(toRate) && toRate > 0;
-  const value = valid ? toRate / fromRate : NaN;
+  const value = valid ? fromRate / toRate : NaN;
   const display = valid ? value.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:4}) : "Temporarily unavailable";
   const amount = valid ? (100 * value).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) : "unavailable";
-  const referenceDate = corridor.to === "NGN" ? (ngnData && ngnData.updated) : (fx && fx.date);
-  const source = corridor.to === "NGN" ? "ExchangeRate-API open endpoint for NGN; Frankfurter reference data for the sending currency" : "Frankfurter · central-bank reference data";
+  const referenceDate = data && data.updated ? data.updated : null;
+  const source = "ExchangeRate-API open endpoint · common USD-based reference snapshot";
   const links = DIASPORA_CORRIDORS.filter(c=>c.slug!==corridor.slug).map(c=>'<a class="text-link" href="/rates/'+c.slug+'">'+c.from+' to '+c.to+' ('+c.sender+' to '+c.country+')</a>').join(" · ");
   const content = '<section class="page-title"><div class="wrap"><div class="eyebrow">AFR DIASPORA CURRENCY GUIDE</div><h1>'+corridor.sender+' to '+corridor.country+' exchange rate</h1><p>Indicative conversion from '+corridor.fromName+' ('+corridor.from+') to '+corridor.toName+' ('+corridor.to+').</p></div></section>'+
   '<main class="wrap" style="padding-top:28px;padding-bottom:48px"><section class="rate-panel"><div class="rate-head"><div><div class="eyebrow">CROSS-BORDER CURRENCY REFERENCE</div><h2>1 '+corridor.from+' = '+display+' '+corridor.to+'</h2></div><span class="market-tag">REFERENCE RATE</span></div>'+
-  '<p class="market-note">Reference date: '+esc(String(referenceDate || "Latest available"))+' · Source: '+esc(source)+'</p>'+
+  '<p class="market-note">'+(referenceDate ? "Reference updated: "+esc(String(referenceDate)) : "Latest available reference update unavailable")+' · Source: '+esc(source)+'</p>'+
   '<p>At this indicative reference rate, 100 '+corridor.from+' is approximately '+amount+' '+corridor.to+'. This calculation is a currency reference only; it is not a quote from a money-transfer company.</p>'+
   '<p class="rate-note">The displayed rate excludes provider fees, exchange-rate margins, card or bank charges and payout costs. The actual amount a recipient receives may be lower or different. Check the provider quote immediately before sending.</p></section>'+
-  '<section class="article"><h2>How to compare a transfer on this corridor</h2><p>Enter the same sending amount, payment method and payout method into each regulated provider\'s official calculator. Compare the total amount debited and the final amount the recipient receives—not just the advertised fee or headline rate. Promotional rates and limits may apply.</p><p>Reference rates are useful for context, but they are not executable remittance prices. Rates may be delayed or unavailable on weekends and public holidays. Always confirm the provider\'s final quote.</p><h2>Explore other AFR diaspora currency corridors</h2><p>'+links+'</p><p><a class="text-link" href="/diaspora-rates">VIEW ALL DIASPORA RATES →</a> · <a class="text-link" href="/rates">GLOBAL CURRENCY MONITOR →</a></p></section></main>';
-  const title = corridor.sender+' to '+corridor.country+' Exchange Rate Today | AFR';
-  const description = 'Indicative '+corridor.from+' to '+corridor.to+' reference exchange rate for '+corridor.sender+' to '+corridor.country+'. See the reference date, conversion example and remittance comparison guidance.';
+  '<section class="article"><h2>How to compare a transfer on this corridor</h2><p>Enter the same sending amount, payment method and payout method into each regulated provider\'s official calculator. Compare the total amount debited and the final amount the recipient receives—not just the advertised fee or headline rate. Promotional rates and limits may apply.</p><p>Reference rates are indicative, may be delayed and are not executable remittance prices. Always confirm the provider\'s final quote.</p><h2>Explore other AFR diaspora currency corridors</h2><p>'+links+'</p><p><a class="text-link" href="/diaspora-rates">VIEW ALL DIASPORA RATES →</a> · <a class="text-link" href="/rates">VIEW ALL GLOBAL EXCHANGE RATES →</a></p></section></main>';
+  const title = corridor.sender+" to "+corridor.country+" Exchange Rate | Atlantic Financial Review";
+  const description = "Check an indicative "+corridor.from+" to "+corridor.to+" reference exchange rate, update time and conversion example.";
   return shell(content,"Currencies",title,description,"/rates/"+corridor.slug);
 }
-
 function diasporaRatesPage() {
   const cards = DIASPORA_CORRIDORS.map(c=>'<a class="feature" href="/rates/'+c.slug+'"><span class="tag">'+c.sender+' TO '+c.country.toUpperCase()+'</span><h3>'+c.from+' to '+c.to+'</h3><p>Indicative '+c.fromName+' to '+c.toName+' reference conversion and practical transfer comparison guidance.</p><span class="text-link">VIEW CORRIDOR RATE →</span></a>').join("");
   const content = '<section class="page-title"><div class="wrap"><div class="eyebrow">AFR DIASPORA FINANCE</div><h1>Exchange rates from the UK, USA and Canada to Africa</h1><p>Indicative currency references for transfers from three major diaspora markets to Nigeria, Ghana and Kenya.</p></div></section><main class="wrap" style="padding-top:28px;padding-bottom:50px"><section class="article"><h2>Choose a sending corridor</h2><p>Use these reference rates to understand currency conversion. They are not money-transfer provider quotes and do not include fees or exchange-rate margins.</p><div class="cards">'+cards+'</div><p class="rate-note">For a real transfer, compare the final recipient payout using the same amount, payment method and payout method on each provider\'s official calculator. Each corridor page identifies its data source and reference date.</p><p><a class="text-link" href="/rates">VIEW GLOBAL CURRENCY MONITOR →</a></p></section></main>';
@@ -503,7 +502,9 @@ async function getRates() {
   if (data.result !== "success" || !data.rates || !data.rates.NGN) throw new Error("Currency data unavailable");
   const ngn = Number(data.rates.NGN);
   const rates = {};
-  for (const code of ["USD", "GBP", "EUR", "CAD"]) {
+  // Store NGN-per-unit reference values for all diaspora corridor currencies.
+  // This uses one upstream snapshot so cross-rates share the same update timestamp.
+  for (const code of ["USD", "GBP", "EUR", "CAD", "GHS", "KES"]) {
     const perUsd = Number(data.rates[code]);
     rates[code] = code === "USD" ? ngn : (perUsd > 0 ? ngn / perUsd : null);
   }
@@ -519,7 +520,7 @@ async function getRates() {
 
 
 async function refreshGlobalFx(env) {
-  const upstream = await fetch("https://api.frankfurter.dev/v2/rates?base=USD&quotes=EUR,GBP,JPY,CHF,CNY,CAD,AUD,NZD,SGD,HKD,SEK,NOK,DKK,PLN,CZK,HUF,TRY,MXN,BRL,ZAR,INR,KRW,THB,IDR,PHP,MYR,GHS,KES", {
+  const upstream = await fetch("https://api.frankfurter.dev/v2/rates?base=USD&quotes=EUR,GBP,JPY,CHF,CNY,CAD,AUD,NZD,SGD,HKD,SEK,NOK,DKK,PLN,CZK,HUF,TRY,MXN,BRL,ZAR,INR,KRW,THB,IDR,PHP,MYR", {
     headers: { "Accept": "application/json" },
     cf: { cacheTtl: 3600, cacheEverything: true }
   });

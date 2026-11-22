@@ -160,7 +160,7 @@ const DIASPORA_CORRIDORS = [
   {from:"GBP",to:"NGN",fromName:"British pound",toName:"Nigerian naira",sender:"UK",country:"Nigeria",slug:"gbp-to-ngn"},
   {from:"GBP",to:"GHS",fromName:"British pound",toName:"Ghanaian cedi",sender:"UK",country:"Ghana",slug:"gbp-to-ghs"},
   {from:"GBP",to:"KES",fromName:"British pound",toName:"Kenyan shilling",sender:"UK",country:"Kenya",slug:"gbp-to-kes"},
-  {from:"USD",to:"NGN",fromName:"US dollar",toName:"Nigerian naira",sender:"USA",country:"Nigeria",slug:"usd-to-ngn-diaspora"},
+  {from:"USD",to:"NGN",fromName:"US dollar",toName:"Nigerian naira",sender:"USA",country:"Nigeria",slug:"usd-to-ngn"},
   {from:"USD",to:"GHS",fromName:"US dollar",toName:"Ghanaian cedi",sender:"USA",country:"Ghana",slug:"usd-to-ghs"},
   {from:"USD",to:"KES",fromName:"US dollar",toName:"Kenyan shilling",sender:"USA",country:"Kenya",slug:"usd-to-kes"},
   {from:"CAD",to:"NGN",fromName:"Canadian dollar",toName:"Nigerian naira",sender:"Canada",country:"Nigeria",slug:"cad-to-ngn"},
@@ -580,21 +580,21 @@ export default {
     }
 
     if (path === "/sitemap.xml") {
-      const urls = ["/", "/features", "/markets", "/rates", "/diaspora-rates", "/about", ...Object.values(FX_PAIR_PAGES).map(v => "/rates/" + v.slug), ...DIASPORA_CORRIDORS.map(v => "/rates/" + v.slug), ...stories.map(s => "/article/" + s.slug)];
+      const urls = [...new Set(["/", "/features", "/markets", "/rates", "/diaspora-rates", "/about", ...Object.values(FX_PAIR_PAGES).map(v => "/rates/" + v.slug), ...DIASPORA_CORRIDORS.map(v => "/rates/" + v.slug), ...stories.map(s => "/article/" + s.slug)])];
       const xml = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map(p => `<url><loc>${SITE.domain}${p}</loc></url>`).join("")}</urlset>`;
       return new Response(xml, { headers: { "content-type": "application/xml; charset=utf-8" } });
     }
 
     if (path.startsWith("/rates/")) {
       const slug = path.slice("/rates/".length);
-      const pair = Object.entries(FX_PAIR_PAGES).find(([,v]) => v.slug === slug);
-      if (pair) {
-        const page = await currencyPairPage(env, pair[0]);
-        return new Response(page, {headers:{"content-type":"text/html; charset=utf-8","Cache-Control":"public, max-age=300","X-Content-Type-Options":"nosniff"}});
-      }
       const corridor = DIASPORA_CORRIDORS.find(v => v.slug === slug);
       if (corridor) {
         const page = await diasporaRatePage(env, corridor);
+        return new Response(page, {headers:{"content-type":"text/html; charset=utf-8","Cache-Control":"public, max-age=300","X-Content-Type-Options":"nosniff"}});
+      }
+      const pair = Object.entries(FX_PAIR_PAGES).find(([,v]) => v.slug === slug);
+      if (pair) {
+        const page = await currencyPairPage(env, pair[0]);
         return new Response(page, {headers:{"content-type":"text/html; charset=utf-8","Cache-Control":"public, max-age=300","X-Content-Type-Options":"nosniff"}});
       }
     }

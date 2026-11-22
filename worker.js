@@ -201,6 +201,17 @@ async function ratesPage(env) {
 
   const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">GLOBAL CURRENCY MONITOR</div><h1>Global exchange rates</h1><p>Daily reference rates for major world currencies, with the publication date shown clearly.</p></div></section>
   <main class="wrap" style="padding-top:28px;padding-bottom:50px">
+    <section class="article fx-converter" aria-labelledby="fx-converter-title">
+      <div class="eyebrow">AFR CURRENCY TOOL</div><h2 id="fx-converter-title">Convert currencies</h2>
+      <p>Estimate a conversion using the latest available daily reference rates. Choose any supported currency pair.</p>
+      <div class="fx-converter-grid">
+        <label>Amount<input id="fx-amount" type="number" min="0" step="any" value="100" inputmode="decimal"></label>
+        <label>From<select id="fx-from"></select></label>
+        <label>To<select id="fx-to"></select></label>
+      </div>
+      <div class="fx-result" aria-live="polite"><span>Estimated result</span><strong id="fx-result">Loading reference rates…</strong><small id="fx-converter-date">Fetching latest available data</small></div>
+      <p class="rate-note">Indicative mid-market calculation only. Bank, card and provider rates may differ, and fees are not included.</p>
+    </section>
     <section class="rate-panel" style="margin-bottom:22px">
       <div class="rate-head"><div><div class="eyebrow">FOREIGN EXCHANGE</div><h2>How much is US$1 worth?</h2></div><span class="market-tag">DAILY REFERENCE</span></div>
       <div id="global-fx-state" class="market-note">${fxState}</div>
@@ -211,6 +222,13 @@ async function ratesPage(env) {
     <section class="article"><h2>Popular USD exchange rates</h2><p><a class="text-link" href="/rates/usd-to-ngn">USD to NGN →</a> · <a class="text-link" href="/rates/usd-to-gbp">USD to GBP →</a> · <a class="text-link" href="/rates/usd-to-eur">USD to EUR →</a> · <a class="text-link" href="/rates/usd-to-cad">USD to CAD →</a> · <a class="text-link" href="/rates/usd-to-jpy">USD to JPY →</a> · <a class="text-link" href="/rates/usd-to-inr">USD to INR →</a> · <a class="text-link" href="/rates/usd-to-zar">USD to ZAR →</a> · <a class="text-link" href="/rates/usd-to-aud">USD to AUD →</a></p></section><section class="article"><h2>How to read this monitor</h2><p>The table shows the number of units of each listed currency equivalent to one US dollar. The date is the source publication date, not necessarily today's date. A previous working day's figure may remain visible when markets or central banks are closed.</p><p>For a transaction, confirm the final rate and fees directly with your bank or regulated currency provider.</p><p>Data service: <a class="text-link" href="https://frankfurter.dev/" target="_blank" rel="noopener">Frankfurter</a>. This is an informational reference monitor, not investment or foreign-exchange advice.</p></section>
   </main>
   <style>
+  .fx-converter{background:#fff;border:1px solid #e5eaf0;border-radius:10px;padding:22px;margin:0 0 22px}
+  .fx-converter-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:12px;margin:18px 0}
+  .fx-converter-grid label{display:grid;gap:6px;font-size:12px;font-weight:700;color:#637187}
+  .fx-converter-grid input,.fx-converter-grid select{width:100%;min-width:0;padding:12px;border:1px solid #cfd8e3;border-radius:6px;background:#fff;color:#152238;font:inherit}
+  .fx-result{display:grid;gap:4px;background:#f2f6fb;border-left:4px solid #1769aa;padding:14px 16px}
+  .fx-result span,.fx-result small{font-size:12px;color:#637187}.fx-result strong{font-size:clamp(22px,4vw,32px);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+  @media(max-width:600px){.fx-converter-grid{grid-template-columns:1fr 1fr}.fx-converter-grid label:first-child{grid-column:1/-1}}
   .market-tag{font-size:11px;font-weight:700;letter-spacing:1px;background:#edf2f7;color:#29425f;padding:7px 10px;border-radius:3px}
   .market-note{font-size:13px;color:#637187;margin:12px 0}
   .fx-table-wrap{overflow-x:auto}
@@ -225,6 +243,37 @@ async function ratesPage(env) {
     const rows=document.getElementById("global-fx-rows");
     const state=document.getElementById("global-fx-state");
     if(!rows||!state)return;
+    const converterAmount=document.getElementById("fx-amount");
+    const converterFrom=document.getElementById("fx-from");
+    const converterTo=document.getElementById("fx-to");
+    const converterResult=document.getElementById("fx-result");
+    const converterDate=document.getElementById("fx-converter-date");
+    const currencyNames={USD:"US dollar",NGN:"Nigerian naira",EUR:"Euro",GBP:"Pound sterling",JPY:"Japanese yen",CHF:"Swiss franc",CNY:"Chinese yuan",CAD:"Canadian dollar",AUD:"Australian dollar",NZD:"New Zealand dollar",SGD:"Singapore dollar",HKD:"Hong Kong dollar",SEK:"Swedish krona",NOK:"Norwegian krone",DKK:"Danish krone",PLN:"Polish zloty",CZK:"Czech koruna",HUF:"Hungarian forint",TRY:"Turkish lira",MXN:"Mexican peso",BRL:"Brazilian real",ZAR:"South African rand",INR:"Indian rupee",KRW:"South Korean won",THB:"Thai baht",IDR:"Indonesian rupiah",PHP:"Philippine peso",MYR:"Malaysian ringgit"};
+    let converterRates=null;
+    const formatMoney=(n)=>Number(n).toLocaleString(undefined,{maximumFractionDigits:4});
+    function updateConverter(){
+      if(!converterRates||!converterAmount||!converterFrom||!converterTo)return;
+      const amount=Number(converterAmount.value),from=converterFrom.value,to=converterTo.value;
+      const a=converterRates[from],b=converterRates[to];
+      if(!Number.isFinite(amount)||amount<0||!Number.isFinite(a)||!Number.isFinite(b)||a<=0){
+        converterResult.textContent="Enter a valid amount";return;
+      }
+      converterResult.textContent=formatMoney(amount/a*b)+" "+to;
+    }
+    if(converterFrom&&converterTo){
+      const codes=["USD","NGN","EUR","GBP","JPY","CHF","CNY","CAD","AUD","NZD","SGD","HKD","SEK","NOK","DKK","PLN","CZK","HUF","TRY","MXN","BRL","ZAR","INR","KRW","THB","IDR","PHP","MYR"];
+      const options=codes.map(code=>"<option value='"+code+"'>"+code+" · "+currencyNames[code]+"</option>").join("");
+      converterFrom.innerHTML=options;converterTo.innerHTML=options;
+      converterFrom.value="USD";converterTo.value="NGN";
+      [converterAmount,converterFrom,converterTo].forEach(el=>el&&el.addEventListener("input",updateConverter));
+      [converterFrom,converterTo].forEach(el=>el&&el.addEventListener("change",updateConverter));
+      Promise.all([fetch("/api/global-fx",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("FX unavailable");return r.json()}),fetch("/api/rates",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("NGN unavailable");return r.json()})])
+        .then(([globalFx,ngnFx])=>{
+          converterRates={USD:1,...globalFx.rates,NGN:Number(ngnFx.rates&&ngnFx.rates.USD)};
+          updateConverter();
+          converterDate.textContent="Reference dates: "+globalFx.date+" (major currencies); "+String(ngnFx.updated||"latest available")+" (NGN).";
+        }).catch(()=>{converterResult.textContent="Converter temporarily unavailable";converterDate.textContent="Reference data could not be loaded. Please try again later.";});
+    }
     const names={EUR:"Euro",GBP:"Pound sterling",JPY:"Japanese yen",CHF:"Swiss franc",CNY:"Chinese yuan",CAD:"Canadian dollar",AUD:"Australian dollar",NZD:"New Zealand dollar",SGD:"Singapore dollar",HKD:"Hong Kong dollar",SEK:"Swedish krona",NOK:"Norwegian krone",DKK:"Danish krone",PLN:"Polish zloty",CZK:"Czech koruna",HUF:"Hungarian forint",TRY:"Turkish lira",MXN:"Mexican peso",BRL:"Brazilian real",ZAR:"South African rand",INR:"Indian rupee",KRW:"South Korean won",THB:"Thai baht",IDR:"Indonesian rupiah",PHP:"Philippine peso",MYR:"Malaysian ringgit"};
     try{
       const response=await fetch("/api/global-fx",{cache:"no-store"});

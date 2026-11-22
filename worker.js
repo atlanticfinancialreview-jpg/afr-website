@@ -196,8 +196,6 @@ async function currencyPairPage(env, code) {
   return shell(content,"Currencies",title,description,"/rates/"+item.slug);
 }
 
-async function ratesPage(env) {
-
 async function diasporaRatePage(env, corridor) {
   const fx = await getGlobalFxPageData(env);
   const ngnData = corridor.to === "NGN" ? await getRates().catch(() => null) : null;
@@ -229,7 +227,7 @@ function diasporaRatesPage() {
   return shell(content,"Currencies","Diaspora Exchange Rates: UK, USA and Canada to Africa | AFR","Indicative exchange-rate references for sending money from the UK, USA and Canada to Nigeria, Ghana and Kenya.","/diaspora-rates");
 }
 
-
+async function ratesPage(env) {
   const fx = await getGlobalFxPageData(env);
   const ngnData = await getRates().catch(() => null);
   if (fx && ngnData && ngnData.rates && Number.isFinite(Number(ngnData.rates.USD))) fx.rates.NGN = Number(ngnData.rates.USD);

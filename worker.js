@@ -524,14 +524,19 @@ async function getRates(env, forceRefresh = false) {
     const perUsd = Number(data.rates[code]);
     rates[code] = code === "USD" ? ngn : (perUsd > 0 ? ngn / perUsd : null);
   }
-  return {
+  const payload = {
     base: "USD",
     quote: "NGN",
     rates,
     updated: data.time_last_update_utc || new Date().toISOString(),
+    fetchedAt: new Date().toISOString(),
     source: "ExchangeRate-API open endpoint",
     type: "indicative-mid-market"
   };
+  if (env && env.AFR_DATA) {
+    await env.AFR_DATA.put("rates:latest", JSON.stringify(payload));
+  }
+  return payload;
 }
 
 

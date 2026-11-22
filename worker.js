@@ -173,7 +173,7 @@ async function currencyPairPage(env, code) {
   if (!item) return null;
   let value = null, date = null, source = item.source;
   if (code === "NGN") {
-    const ngn = await getRates();
+    const ngn = await getRates(env);
     value = Number(ngn.rates && ngn.rates.USD);
     date = ngn.updated;
   } else {
@@ -200,7 +200,7 @@ async function diasporaRatePage(env, corridor) {
   // Use the same ExchangeRate-API snapshot for the sender and recipient
   // currencies. This avoids relying on Frankfurter for GHS/KES, which are
   // not consistently available from that central-bank reference feed.
-  const data = await getRates().catch(() => null);
+  const data = await getRates(env).catch(() => null);
   const fromRate = Number(data && data.rates && data.rates[corridor.from]);
   const toRate = Number(data && data.rates && data.rates[corridor.to]);
   const valid = Number.isFinite(fromRate) && fromRate > 0 && Number.isFinite(toRate) && toRate > 0;
@@ -228,7 +228,7 @@ function diasporaRatesPage() {
 
 async function ratesPage(env) {
   const fx = await getGlobalFxPageData(env);
-  const ngnData = await getRates().catch(() => null);
+  const ngnData = await getRates(env).catch(() => null);
   if (fx && ngnData && ngnData.rates && Number.isFinite(Number(ngnData.rates.USD))) fx.rates.NGN = Number(ngnData.rates.USD);
   const fxNames = {NGN:"Nigerian naira",GHS:"Ghanaian cedi",KES:"Kenyan shilling",EUR:"Euro",GBP:"Pound sterling",JPY:"Japanese yen",CHF:"Swiss franc",CNY:"Chinese yuan",CAD:"Canadian dollar",AUD:"Australian dollar",NZD:"New Zealand dollar",SGD:"Singapore dollar",HKD:"Hong Kong dollar",SEK:"Swedish krona",NOK:"Norwegian krone",DKK:"Danish krone",PLN:"Polish zloty",CZK:"Czech koruna",HUF:"Hungarian forint",TRY:"Turkish lira",MXN:"Mexican peso",BRL:"Brazilian real",ZAR:"South African rand",INR:"Indian rupee",KRW:"South Korean won",THB:"Thai baht",IDR:"Indonesian rupiah",PHP:"Philippine peso",MYR:"Malaysian ringgit"};
   const fxOrder = ["NGN","GHS","KES","EUR","GBP","JPY","CHF","CNY","CAD","AUD","NZD","SGD","HKD","SEK","NOK","DKK","PLN","CZK","HUF","TRY","MXN","BRL","ZAR","INR","KRW","THB","IDR","PHP","MYR"];
@@ -492,7 +492,23 @@ function policyPage(kind) {
   return shell(content,"About",page.title+" | Atlantic Financial Review",page.description,path);
 }
 
-async function getRates() {
+async function getRates(env, forceRefresh = false) {
+  // Reuse the latest successful snapshot from KV to avoid an upstream
+  // request on every page view and to keep all corridor calculations aligned.
+  if (!forceRefresh && env && env.AFR_DATA) {
+    try {
+      const saved = await env.AFR_DATA.get("rates:latest");
+      if (saved) {
+        const cached = JSON.parse(saved);
+        const updatedAt = Date.parse(cached.updated || cached.fetchedAt || "");
+        const required = ["USD", "GBP", "CAD", "GHS", "KES", "NGN"];
+        const complete = cached.rates && required.every(code => Number.isFinite(Number(cached.rates[code])) && Number(cached.rates[code]) > 0);
+        if (complete && Number.isFinite(updatedAt) && Date.now() - updatedAt < 36 * 60 * 60 * 1000) return cached;
+      }
+    } catch (error) {
+      // Ignore a bad cache entry and try the upstream source.
+    }
+  }
   const upstream = await fetch("https://open.er-api.com/v6/latest/USD", {
     headers: { "Accept": "application/json" },
     cf: { cacheTtl: 900, cacheEverything: true }
@@ -570,7 +586,7 @@ async function refreshGlobalFx(env) {
 }
 
 async function refreshAndStoreRates(env) {
-  const data = await getRates();
+  const data = await getRates(env, true);
   if (env.AFR_DATA) {
     const payload = { ...data, fetchedAt: new Date().toISOString() };
     await env.AFR_DATA.put("rates:latest", JSON.stringify(payload));

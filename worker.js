@@ -520,7 +520,11 @@ async function getRates(env, forceRefresh = false) {
   const rates = {};
   // Store NGN-per-unit reference values for all diaspora corridor currencies.
   // This uses one upstream snapshot so cross-rates share the same update timestamp.
-  for (const code of ["USD", "GBP", "EUR", "CAD", "GHS", "KES"]) {
+  for (const code of ["NGN", "USD", "GBP", "EUR", "CAD", "GHS", "KES"]) {
+    if (code === "NGN") {
+      rates[code] = 1;
+      continue;
+    }
     const perUsd = Number(data.rates[code]);
     rates[code] = code === "USD" ? ngn : (perUsd > 0 ? ngn / perUsd : null);
   }

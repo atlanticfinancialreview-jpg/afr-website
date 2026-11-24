@@ -90,8 +90,17 @@ async function loadRates(){
   if(!response.ok)throw new Error("Rate service unavailable");
   const data=await response.json();
   if(!data.rates)throw new Error("No rate data");
-  const names=[["USD","US dollar"],["GBP","British pound"],["EUR","Euro"],["CAD","Canadian dollar"]];
-  box.innerHTML=names.map(([code,label])=>{const value=data.rates[code];const shown=value?"₦"+Number(value).toLocaleString("en-NG",{maximumFractionDigits:2}):"Unavailable";return '<div class="rate-box"><small>'+label+' ('+code+')</small><strong>'+shown+'</strong><small>per 1 '+code+'</small></div>'}).join("");
+  const corridors=[
+   ["USD","NGN","USA","Nigeria"],["USD","GHS","USA","Ghana"],["USD","KES","USA","Kenya"],
+   ["GBP","NGN","UK","Nigeria"],["GBP","GHS","UK","Ghana"],["GBP","KES","UK","Kenya"],
+   ["CAD","NGN","Canada","Nigeria"],["CAD","GHS","Canada","Ghana"],["CAD","KES","Canada","Kenya"]
+  ];
+  box.innerHTML=corridors.map(([from,to,sender,country])=>{
+   const fromRate=Number(data.rates[from]),toRate=Number(data.rates[to]);
+   const value=fromRate>0&&toRate>0?fromRate/toRate:null;
+   const shown=value?Number(value).toLocaleString("en-US",{maximumFractionDigits:4}):"Unavailable";
+   return '<div class="rate-box"><small>'+sender+' → '+country+'</small><strong>'+shown+' '+to+'</strong><small>per 1 '+from+'</small></div>';
+  }).join("");
   const updated=document.getElementById("rate-updated");
   if(updated)updated.textContent="Indicative mid-market reference · Updated "+new Date(data.updated).toLocaleString();
  }catch(e){box.innerHTML='<div class="rate-box"><small>Currency data</small><strong>Temporarily unavailable</strong></div>';const updated=document.getElementById("rate-updated");if(updated)updated.textContent="Please check again shortly. No rate has been estimated."}

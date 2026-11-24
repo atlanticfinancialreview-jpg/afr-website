@@ -4,6 +4,6 @@ compatibility_date = "2026-11-24"
 workers_dev = true
 
 routes = [
-  { pattern = "atlanticfinancialreview.com/diaspora*", zone_name = "atlanticfinancialreview.com" },
-  { pattern = "www.atlanticfinancialreview.com/diaspora*", zone_name = "atlanticfinancialreview.com" }
+  { pattern = "atlanticfinancialreview.com/diaspora-series*", zone_name = "atlanticfinancialreview.com" },
+  { pattern = "www.atlanticfinancialreview.com/diaspora-series*", zone_name = "atlanticfinancialreview.com" }
 ]

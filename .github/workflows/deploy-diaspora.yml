@@ -1,5 +1,6 @@
 name: Deploy AFR Diaspora Publisher
 
+# Deployment workflow for the isolated AFR diaspora publisher.
 on:
   push:
     branches:

@@ -57,14 +57,14 @@ export default {
       if (!response.ok) return new Response("Editorial content is temporarily unavailable.", { status: 502 });
       const md = await response.text();
       const articles = extractArticles(md);
-      const match = url.pathname.match(/^\/(?:diaspora\/)?(\d+)\/?$/);
+      const match = url.pathname.match(/^\/diaspora-series\/(\d+)\/?$/);
       if (match) {
         const article = articles.find(a => a.id === Number(match[1]));
         if (!article) return new Response("Article not found", { status: 404 });
-        const body = '<p class="back"><a href="/diaspora/">← All diaspora features</a></p><article class="article"><h1>' + esc(article.title) + '</h1><p class="dek">' + esc(article.desc) + '</p>' + markdown(article.body) + '<div class="notice">This feature is general financial information, not personal investment, legal or tax advice. Verify current rules and seek qualified advice for your circumstances.</div></article>';
+        const body = '<p class="back"><a href="/diaspora-series/">← All diaspora features</a></p><article class="article"><h1>' + esc(article.title) + '</h1><p class="dek">' + esc(article.desc) + '</p>' + markdown(article.body) + '<div class="notice">This feature is general financial information, not personal investment, legal or tax advice. Verify current rules and seek qualified advice for your circumstances.</div></article>';
         return new Response(page(article.title, article.desc, body), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "public, max-age=300" } });
       }
-      const cards = articles.map(a => '<section class="item"><h2>' + esc(a.title) + '</h2><p>' + esc(a.desc) + '</p><a href="/diaspora/' + a.id + '/">READ FEATURE →</a></section>').join("");
+      const cards = articles.map(a => '<section class="item"><h2>' + esc(a.title) + '</h2><p>' + esc(a.desc) + '</p><a href="/diaspora-series/' + a.id + '/">READ FEATURE →</a></section>').join("");
       const body = '<article class="article"><p class="back">AFR SPECIAL SERIES</p><h1>African Diaspora Finance</h1><p class="dek">Ten practical features on remittances, cross-border wealth, property, retirement, currency, entrepreneurship and estate planning.</p><div class="grid">' + cards + '</div><div class="notice">General financial education only. This series is not personal investment, legal or tax advice. Statistics, legislation and tax guidance should be checked against current official sources before publication.</div></article>';
       return new Response(page("African Diaspora Finance", "Ten practical features for African diaspora readers.", body), { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "public, max-age=300" } });
     } catch (e) {

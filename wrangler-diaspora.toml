@@ -1,0 +1,4 @@
+name = "afr-diaspora-publisher"
+main = "worker-diaspora.js"
+compatibility_date = "2026-11-24"
+workers_dev = true

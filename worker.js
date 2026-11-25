@@ -724,7 +724,7 @@ export default {
     else if (path === "/editorial-standards") html = policyPage("editorial");
     else if (path.startsWith("/article/")) {
       const slug = path.slice("/article/".length);
-      const story = stories.find(s => s.slug === slug);
+      const story = stories.find(s => s.slug === slug) || stories.find(s => slug === s.title.toLowerCase().replace(/&/g,"and").replace(/[\u0027\u2019]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""));
       html = story ? articlePage(story) : shell(`<main class="wrap"><div class="article"><h1>Article not found</h1><p>The page may have moved.</p><a class="text-link" href="/features">EXPLORE CURRENT FEATURES →</a></div></main>`);
       if (!story) responseStatus = 404;
     } else {

@@ -1,5 +1,5 @@
 import diasporaStories from "./diaspora-stories.js";
-// Diaspora finance features are bundled into the main AFR editorial feed.
+// Diaspora finance features are bundled into the main AFR editorial feed and sitemap.
 const SITE = {
   name: "Atlantic Financial Review",
   short: "AFR",

@@ -136,9 +136,9 @@ function homePage() {
 }
 
 function featuresPage() {
-  const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">AFR FEATURES</div><h1>Global finance and business, explained.</h1><p>Thirty-one editorial features exploring the economy, currencies, markets, banking, investment, technology, energy and leadership.</p></div></section>
+  const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">AFR FEATURES</div><h1>Global finance and business, explained.</h1><p>${stories.length} editorial features exploring the economy, currencies, markets, banking, investment, technology, energy, leadership and cross-border finance.</p></div></section>
   <main class="wrap"><div class="cards">${stories.map(s=>`<a class="feature" href="/article/${s.slug}"><div class="icon">↗</div><span class="tag">${esc(s.category)}</span><h3>${esc(s.title)}</h3><p>${esc(s.summary)}</p><span class="text-link">READ FEATURE →</span></a>`).join("")}</div></main>`;
-  return shell(content, "Features", "Global Finance Features | Atlantic Financial Review", "Explore global finance and business features from AFR, including ten diaspora finance guides.", "/features");
+  return shell(content, "Features", "Global Finance Features | Atlantic Financial Review", "Explore global finance and business features from AFR.", "/features");
 }
 
 async function getGlobalFxPageData(env) {
@@ -454,7 +454,7 @@ function articlePage(story) {
   const relatedLinks = relatedStories.map(item => '<li><a class="text-link" href="/article/' + item.slug + '">' + esc(item.title) + '</a> — ' + esc(item.summary) + '</li>').join("");
   const content = `<section class="page-title"><div class="wrap"><div class="eyebrow">AFR KNOWLEDGE DESK</div><p>Independent explainers for informed financial decisions.</p></div></section>
   <main class="wrap"><article class="article"><div class="tag">${esc(story.category)}</div><h1>${esc(story.title)}</h1><p class="intro">${esc(story.summary)}</p><div class="article-meta">Published: ${esc(story.date)} · By AFR Editorial Desk · ${esc(story.read)}</div>${story.image ? imageTag(story.image,story.title,"article-hero-image") : ""}${story.body.map(([h,p])=>`<h2>${esc(h)}</h2><p>${esc(p)}</p>`).join("")}${(Array.isArray(story.sources) ? story.sources.filter(source => source && source.title && source.url) : []).length ? `<div class="notice source-list"><h2>Sources and further reading</h2><ul>${(Array.isArray(story.sources) ? story.sources.filter(source => source && source.title && source.url) : []).map(source=>`<li><a class="text-link" href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">${esc(source.title)}</a></li>`).join("")}</ul></div>` : ""}<div class="notice"><h2>Editorial note</h2>This article is general information, not individual financial, legal or tax advice. Check current rules and consult a qualified professional where necessary.</div><div class="notice"><h2>Continue reading</h2><ul>${relatedLinks}</ul></div><p style="margin-top:25px"><a class="text-link" href="/features">← BACK TO ALL FEATURES</a></p></article></main>`;
-  return shell(content, "Features", story.title + " | Atlantic Financial Review", story.summary, "/article/" + story.slug, "article").replace("</head>", `<meta property="og:image" content="${SITE.domain}/images/${encodeURIComponent(story.image)}">
+  return shell(content, "Features", story.title + " | Atlantic Financial Review", story.summary, "/article/" + story.slug, "article").replace("</head>", `${story.image ? `<meta property="og:image" content="${SITE.domain}/images/${encodeURIComponent(story.image)}">` : ""}
 <meta name="author" content="AFR Editorial Desk">
 <meta property="article:section" content="${esc(story.category)}">
 ${(story.dateISO || (story.date === "November 2026" ? "2026-11" : null)) ? `<meta property="article:published_time" content="${story.dateISO || "2026-11"}">` : ""}

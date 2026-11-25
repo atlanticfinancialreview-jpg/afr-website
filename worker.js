@@ -1,4 +1,5 @@
 import diasporaStories from "./diaspora-stories.js";
+// Keep all diaspora article routes published through the primary AFR Worker.
 
 const SITE = {
   name: "Atlantic Financial Review",

@@ -148,7 +148,9 @@ async function getGlobalFxPageData(env) {
       const saved = await env.AFR_DATA.get("globalfx:latest");
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (parsed && parsed.date && parsed.rates) return parsed;
+        const fetchedAt = Date.parse(parsed && parsed.fetchedAt || "");
+        if (parsed && parsed.date && parsed.rates && Number.isFinite(fetchedAt) &&
+            Date.now() - fetchedAt < 12 * 60 * 60 * 1000) return parsed;
       }
     }
     return await refreshGlobalFx(env);
@@ -515,10 +517,10 @@ async function getRates(env, forceRefresh = false) {
       const saved = await env.AFR_DATA.get("rates:latest");
       if (saved) {
         const cached = JSON.parse(saved);
-        const updatedAt = Date.parse(cached.updated || cached.fetchedAt || "");
+        const updatedAt = Date.parse(cached.fetchedAt || cached.updated || "");
         const required = ["USD", "GBP", "CAD", "GHS", "KES", "NGN"];
         const complete = cached.rates && required.every(code => Number.isFinite(Number(cached.rates[code])) && Number(cached.rates[code]) > 0);
-        if (complete && Number.isFinite(updatedAt) && Date.now() - updatedAt < 36 * 60 * 60 * 1000) return cached;
+        if (complete && Number.isFinite(updatedAt) && Date.now() - updatedAt < 12 * 60 * 60 * 1000) return cached;
       }
     } catch (error) {
       // Ignore a bad cache entry and try the upstream source.
@@ -526,7 +528,7 @@ async function getRates(env, forceRefresh = false) {
   }
   const upstream = await fetch("https://open.er-api.com/v6/latest/USD", {
     headers: { "Accept": "application/json" },
-    cf: { cacheTtl: 900, cacheEverything: true }
+    cf: { cacheTtl: 0, cacheEverything: false }
   });
   if (!upstream.ok) throw new Error("Currency service error");
   const data = await upstream.json();
@@ -562,7 +564,7 @@ async function getRates(env, forceRefresh = false) {
 async function refreshGlobalFx(env) {
   const upstream = await fetch("https://api.frankfurter.dev/v2/rates?base=USD&quotes=EUR,GBP,JPY,CHF,CNY,CAD,AUD,NZD,SGD,HKD,SEK,NOK,DKK,PLN,CZK,HUF,TRY,MXN,BRL,ZAR,INR,KRW,THB,IDR,PHP,MYR", {
     headers: { "Accept": "application/json" },
-    cf: { cacheTtl: 3600, cacheEverything: true }
+    cf: { cacheTtl: 0, cacheEverything: false }
   });
   if (!upstream.ok) throw new Error("Global FX source unavailable");
   const rows = await upstream.json();
@@ -667,12 +669,12 @@ export default {
       const corridor = DIASPORA_CORRIDORS.find(v => v.slug === slug);
       if (corridor) {
         const page = await diasporaRatePage(env, corridor);
-        return new Response(page, {headers:{"content-type":"text/html; charset=utf-8","Cache-Control":"public, max-age=300","X-Content-Type-Options":"nosniff"}});
+        return new Response(page, {headers:{"content-type":"text/html; charset=utf-8","Cache-Control":"no-store, max-age=0","X-Content-Type-Options":"nosniff"}});
       }
       const pair = Object.entries(FX_PAIR_PAGES).find(([,v]) => v.slug === slug);
       if (pair) {
         const page = await currencyPairPage(env, pair[0]);
-        return new Response(page, {headers:{"content-type":"text/html; charset=utf-8","Cache-Control":"public, max-age=300","X-Content-Type-Options":"nosniff"}});
+        return new Response(page, {headers:{"content-type":"text/html; charset=utf-8","Cache-Control":"no-store, max-age=0","X-Content-Type-Options":"nosniff"}});
       }
     }
 
@@ -680,7 +682,7 @@ export default {
       try {
         const data = await refreshGlobalFx(env);
         return Response.json(data, {
-          headers: { "Cache-Control": "public, max-age=3600", "Access-Control-Allow-Origin": "*" }
+          headers: { "Cache-Control": "no-store, max-age=0", "Access-Control-Allow-Origin": "*" }
         });
       } catch (error) {
         return Response.json({ error: "Global currency data is temporarily unavailable." }, {
@@ -700,7 +702,7 @@ export default {
         // First-visit fallback: populate KV if the scheduled job has not run yet.
         if (!data) data = await refreshAndStoreRates(env);
         return Response.json(data, {
-          headers: { "Cache-Control": "public, max-age=900", "Access-Control-Allow-Origin": "*" }
+          headers: { "Cache-Control": "no-store, max-age=0", "Access-Control-Allow-Origin": "*" }
         });
       } catch (error) {
         return Response.json({ error: "Currency data is temporarily unavailable." }, {
@@ -738,7 +740,7 @@ export default {
       headers: {
         "content-type": "text/html; charset=utf-8",
         ...(responseStatus !== 200 ? {"X-Robots-Tag":"noindex, follow"} : {}),
-        "Cache-Control": "public, max-age=300",
+        "Cache-Control": "no-store, max-age=0",
         "X-Content-Type-Options": "nosniff",
         "Referrer-Policy": "strict-origin-when-cross-origin"
       }
